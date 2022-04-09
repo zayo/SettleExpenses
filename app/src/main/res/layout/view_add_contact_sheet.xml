@@ -22,7 +22,6 @@
             android:id="@+id/first_name_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:inputType="textPersonName"
             android:nextFocusForward="@+id/last_name_input" />
 

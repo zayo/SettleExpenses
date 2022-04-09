@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         with(binding) {
+            setSupportActionBar(toolbar)
             val adapter = PagerAdapter(this@MainActivity)
             viewPager.adapter = adapter
             TabLayoutMediator(tabs, viewPager) { tab, position ->

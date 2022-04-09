@@ -12,7 +12,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nislav.settleexpenses.databinding.ViewAddContactSheetBinding
 import com.nislav.settleexpenses.domain.Contact
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.launch
 
 /**
@@ -39,11 +38,11 @@ class AddContactBottomSheet : BottomSheetDialogFragment() {
             actionSave.isEnabled = !empty
         }
         firstNameInput.doAfterTextChanged {
-            contact = contact.copy(firstName = it.toString())
+            contact = contact.copy(firstName = it?.toString()?.trim().orEmpty())
             refreshStates()
         }
         lastNameInput.doAfterTextChanged {
-            contact = contact.copy(lastName = it.toString())
+            contact = contact.copy(lastName = it?.toString()?.trim().orEmpty())
             refreshStates()
         }
         actionSave.setOnClickListener {
