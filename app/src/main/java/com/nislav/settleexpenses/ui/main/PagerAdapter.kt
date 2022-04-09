@@ -2,13 +2,11 @@ package com.nislav.settleexpenses.ui.main
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.nislav.settleexpenses.R
 
 /**
- * A [FragmentPagerAdapter] that returns a fragment corresponding to
- * one of the sections/tabs/pages.
+ * A [FragmentStateAdapter] that returns a fragment corresponding to one of the sections/tabs/pages.
  */
 class PagerAdapter(
     private val fragmentActivity: FragmentActivity

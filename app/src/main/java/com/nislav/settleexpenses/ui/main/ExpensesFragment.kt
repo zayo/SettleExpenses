@@ -6,11 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.nislav.settleexpenses.databinding.FragmentExpensesBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * A fragment displaying Expenses.
  */
+@AndroidEntryPoint
 class ExpensesFragment : Fragment() {
 
     private var _binding: FragmentExpensesBinding? = null
@@ -24,6 +30,12 @@ class ExpensesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.identity.flowWithLifecycle(viewLifecycleOwner.lifecycle).collect {
+                    val prevText = binding.sectionLabel.text
+                    binding.sectionLabel.text = "$prevText\n$it"
+                }
+        }
     }
 
     override fun onDestroyView() {

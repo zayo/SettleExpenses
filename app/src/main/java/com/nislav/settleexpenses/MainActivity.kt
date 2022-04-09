@@ -6,10 +6,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.nislav.settleexpenses.databinding.ActivityMainBinding
 import com.nislav.settleexpenses.ui.main.PagerAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Main activity, holds tabs.
  */
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
