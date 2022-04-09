@@ -26,12 +26,6 @@ class MainActivity : AppCompatActivity() {
             TabLayoutMediator(tabs, viewPager) { tab, position ->
                 tab.text = adapter.getTitle(position)
             }.attach()
-
-            // TODO move to fragments.
-            fab.setOnClickListener { view ->
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-            }
         }
     }
 }
