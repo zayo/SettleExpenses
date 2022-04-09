@@ -22,12 +22,17 @@ class PagerAdapter(
     override fun getItemCount(): Int = TAB_TITLES.size
 
     override fun createFragment(position: Int): Fragment =
-        PlaceholderFragment.newInstance(position + 1)
-
-
+        when (position) {
+            TAB_1_EXPENSES -> ExpensesFragment()
+            TAB_2_CONTACTS -> ContactsFragment()
+            else -> error("Fragment of unkonwn position requested ($position)")
+        }
 }
 
 private val TAB_TITLES = arrayOf(
     R.string.tab_1_expenses,
     R.string.tab_2_contacts
 )
+
+private const val TAB_1_EXPENSES = 0
+private const val TAB_2_CONTACTS = 1
