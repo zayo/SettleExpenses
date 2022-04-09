@@ -1,4 +1,4 @@
-package com.nislav.settleexpenses.ui.main
+package com.nislav.settleexpenses.ui.main.contacts
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.nislav.settleexpenses.databinding.FragmentContactsBinding
+import com.nislav.settleexpenses.ui.main.AddContactBottomSheet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -41,7 +42,7 @@ class ContactsFragment : Fragment() {
             recycler.adapter = adapter
             empty.root.isVisible = true // initially visible
             fabAdd.setOnClickListener {
-                // TODO add contact
+                AddContactBottomSheet().show(parentFragmentManager)
             }
         }
 

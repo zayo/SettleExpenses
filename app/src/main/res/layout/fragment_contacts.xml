@@ -5,7 +5,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.ContactsFragment">
+    tools:context=".ui.main.contacts.ContactsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
@@ -32,5 +32,11 @@
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
         app:srcCompat="@drawable/ic_baseline_add_48"
         app:tint="@color/white" />
+
+    <FrameLayout
+        android:id="@+id/add_contact_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

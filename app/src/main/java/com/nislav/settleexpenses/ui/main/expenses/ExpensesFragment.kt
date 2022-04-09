@@ -1,4 +1,4 @@
-package com.nislav.settleexpenses.ui.main
+package com.nislav.settleexpenses.ui.main.expenses
 
 import android.os.Bundle
 import android.view.LayoutInflater

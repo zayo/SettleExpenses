@@ -1,4 +1,4 @@
-package com.nislav.settleexpenses.ui.main
+package com.nislav.settleexpenses.ui.main.contacts
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -51,7 +51,7 @@ class ContactsAdapter(
 }
 
 private val Contact.initials
-    inline get() = "${firstName.first()}${lastName.first()}"
+    inline get() = "${firstName.first()}${lastName.first()}".uppercase()
 
 private val Contact.name
     inline get() = "$firstName $lastName"

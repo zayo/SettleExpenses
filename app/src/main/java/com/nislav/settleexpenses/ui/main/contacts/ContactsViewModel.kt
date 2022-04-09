@@ -1,4 +1,4 @@
-package com.nislav.settleexpenses.ui.main
+package com.nislav.settleexpenses.ui.main.contacts
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

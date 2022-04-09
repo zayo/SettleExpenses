@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.map
 class ContactsRepositoryImpl : ContactsRepository {
 
     private val _contacts: MutableStateFlow<List<Contact>> =
-        MutableStateFlow(emptyList())
+        singletonContacts
 
     override val contacts: Flow<List<Contact>>
         get() = _contacts.map { it.toList() }
@@ -21,5 +21,11 @@ class ContactsRepositoryImpl : ContactsRepository {
 
     override suspend fun remove(contact: Contact) {
         _contacts.value = _contacts.value - contact
+    }
+
+    companion object {
+        // TMP hack until synced through DB
+        private val singletonContacts: MutableStateFlow<List<Contact>> =
+            MutableStateFlow(emptyList())
     }
 }
