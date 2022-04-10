@@ -13,6 +13,11 @@ interface ContactsRepository {
     val contacts: Flow<List<Contact>>
 
     /**
+     * Loads the contact
+     */
+    suspend fun load(contactId: Long): Contact?
+
+    /**
      * Adds new [contact].
      */
     suspend fun add(contact: Contact)

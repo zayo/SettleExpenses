@@ -3,24 +3,30 @@
     package="com.nislav.settleexpenses">
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".App"
-        android:theme="@style/Theme.SettleExpenses">
+        android:theme="@style/Theme.SettleExpenses.NoActionBar">
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.SettleExpenses.NoActionBar">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.detail.ContactDetailActivity"
+            android:exported="true"
+            android:label="@string/contact_detail"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.SettleExpenses.NoActionBar" />
+
     </application>
 
 </manifest>

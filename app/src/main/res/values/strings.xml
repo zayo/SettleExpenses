@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SettleExpenses</string>
+    <string name="app_name">Settle Expenses</string>
     <string name="tab_1_expenses">Expenses</string>
     <string name="tab_2_contacts">Contacts</string>
     <string name="empty_contacts">No contacts yet.\nStart by tapping \'+\'.</string>
@@ -8,4 +8,7 @@
     <string name="last_name">Last name</string>
     <string name="save">Save</string>
     <string name="action_search">Search contact</string>
+    <string name="contact_detail">Contact Detail</string>
+    <string name="owes_you">Owes you</string>
+    <string name="expenses">Expenses</string>
 </resources>

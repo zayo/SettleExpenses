@@ -15,7 +15,8 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.nislav.settleexpenses.R
 import com.nislav.settleexpenses.databinding.FragmentContactsBinding
-import com.nislav.settleexpenses.ui.main.AddContactBottomSheet
+import com.nislav.settleexpenses.ui.add.contact.AddContactBottomSheet
+import com.nislav.settleexpenses.ui.detail.ContactDetailActivity
 import com.nislav.settleexpenses.util.onTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -28,8 +29,7 @@ import kotlinx.coroutines.flow.onEach
 class ContactsFragment : Fragment() {
 
     private val adapter = ContactsAdapter {
-        // TODO open detail
-        Toast.makeText(requireContext(), "Open detail of [$it]", Toast.LENGTH_SHORT).show()
+        ContactDetailActivity.startActivity(requireContext(), it.id)
     }
 
     private var _binding: FragmentContactsBinding? = null

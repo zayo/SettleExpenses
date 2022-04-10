@@ -58,7 +58,7 @@ private val Contact.name
 
 private class Differ : DiffUtil.ItemCallback<Contact>() {
     override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean =
-        oldItem == newItem
+        oldItem.id == newItem.id
 
     override fun areContentsTheSame(oldItem: Contact, newItem: Contact): Boolean =
         oldItem == newItem

@@ -1,4 +1,4 @@
-package com.nislav.settleexpenses.ui.main
+package com.nislav.settleexpenses.ui.add.contact
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,7 +25,7 @@ class AddContactBottomSheet : BottomSheetDialogFragment() {
     /**
      * Holds the current data before it's saved.
      */
-    private var contact = Contact("", "")
+    private var contact = Contact(firstName = "", lastName = "")
 
     override fun onCreateView(
         inflater: LayoutInflater,
