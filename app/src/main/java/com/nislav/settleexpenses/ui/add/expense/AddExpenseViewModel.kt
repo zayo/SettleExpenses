@@ -6,6 +6,7 @@ import com.nislav.settleexpenses.domain.Contact
 import com.nislav.settleexpenses.domain.ContactsRepository
 import com.nislav.settleexpenses.domain.Expense
 import com.nislav.settleexpenses.domain.ExpensesRepository
+import com.nislav.settleexpenses.ui.SelectableContactsAdapter.SelectableContact
 import com.nislav.settleexpenses.util.Signal
 import com.nislav.settleexpenses.util.normalized
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -68,7 +69,8 @@ class AddExpenseViewModel @Inject constructor(
         contacts
             .map {
                 val selected = it.id in selection
-                SelectableContact(it, selected) }
+                SelectableContact(it, selected)
+            }
     }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     /**
@@ -110,14 +112,6 @@ class AddExpenseViewModel @Inject constructor(
             _saveCompletable.complete(Signal)
         }
     }
-
-    /**
-     * Represents [Contact] that can be selected.
-     */
-    data class SelectableContact(
-        val contact: Contact,
-        val selected: Boolean = false
-    )
 }
 
 private val Contact.searchableName

@@ -1,4 +1,4 @@
-package com.nislav.settleexpenses.ui.add.expense
+package com.nislav.settleexpenses.ui
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nislav.settleexpenses.databinding.ItemContactPickBinding
 import com.nislav.settleexpenses.domain.Contact
 import com.nislav.settleexpenses.getColor
-import com.nislav.settleexpenses.ui.add.expense.AddExpenseViewModel.SelectableContact
-import com.nislav.settleexpenses.ui.add.expense.SelectableContactsAdapter.SelectableContactsViewHolder
+import com.nislav.settleexpenses.ui.SelectableContactsAdapter.SelectableContact
+import com.nislav.settleexpenses.ui.SelectableContactsAdapter.SelectableContactsViewHolder
 
 /**
  * Responsible for displaying list of [SelectableContact].
@@ -51,6 +51,22 @@ class SelectableContactsAdapter(
             }
         }
     }
+
+    private class Differ : DiffUtil.ItemCallback<SelectableContact>() {
+        override fun areItemsTheSame(oldItem: SelectableContact, newItem: SelectableContact): Boolean =
+            oldItem.contact.id == newItem.contact.id
+
+        override fun areContentsTheSame(oldItem: SelectableContact, newItem: SelectableContact): Boolean =
+            oldItem == newItem
+    }
+
+    /**
+     * Represents [Contact] that can be selected.
+     */
+    data class SelectableContact(
+        val contact: Contact,
+        val selected: Boolean = false
+    )
 }
 
 private val Contact.initials
@@ -58,11 +74,3 @@ private val Contact.initials
 
 private val Contact.name
     inline get() = "$firstName $lastName"
-
-private class Differ : DiffUtil.ItemCallback<SelectableContact>() {
-    override fun areItemsTheSame(oldItem: SelectableContact, newItem: SelectableContact): Boolean =
-        oldItem.contact.id == newItem.contact.id
-
-    override fun areContentsTheSame(oldItem: SelectableContact, newItem: SelectableContact): Boolean =
-        oldItem == newItem
-}

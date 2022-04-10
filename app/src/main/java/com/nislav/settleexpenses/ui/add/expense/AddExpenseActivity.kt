@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputLayout
 import com.nislav.settleexpenses.R
 import com.nislav.settleexpenses.databinding.ActivityAddExpenseBinding
+import com.nislav.settleexpenses.ui.SelectableContactsAdapter
 import com.nislav.settleexpenses.ui.add.contact.AddContactBottomSheet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn

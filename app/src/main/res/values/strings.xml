@@ -21,4 +21,9 @@
     <string name="error_group_name">Group name must be filled</string>
     <string name="error_price">Price must be non zero.</string>
     <string name="error_pick_contacts">At least one contact has to be selected.</string>
+    <string name="balance">Balance</string>
+    <string name="expense_participants">Expense participants</string>
+    <string name="mark_as_settled">Mark as settled</string>
+    <string name="of">of</string>
+    <string name="remaining">remaining</string>
 </resources>

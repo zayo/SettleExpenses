@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -16,7 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import com.nislav.settleexpenses.R
 import com.nislav.settleexpenses.databinding.FragmentContactsBinding
 import com.nislav.settleexpenses.ui.add.contact.AddContactBottomSheet
-import com.nislav.settleexpenses.ui.detail.ContactDetailActivity
+import com.nislav.settleexpenses.ui.detail.contact.ContactDetailActivity
 import com.nislav.settleexpenses.util.onTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn

@@ -11,6 +11,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.nislav.settleexpenses.databinding.FragmentExpensesBinding
 import com.nislav.settleexpenses.ui.add.expense.AddExpenseActivity
+import com.nislav.settleexpenses.ui.detail.expense.ExpenseDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -22,7 +23,7 @@ import kotlinx.coroutines.flow.onEach
 class ExpensesFragment : Fragment() {
 
     private val adapter = ExpensesAdapter {
-        //ExpenseDetailActivity.startActivity(requireContext(), it.id)
+        ExpenseDetailActivity.startActivity(requireContext(), it.id)
     }
 
     private var _binding: FragmentExpensesBinding? = null

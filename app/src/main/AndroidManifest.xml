@@ -21,8 +21,13 @@
         </activity>
 
         <activity
-            android:name=".ui.detail.ContactDetailActivity"
+            android:name=".ui.detail.contact.ContactDetailActivity"
             android:label="@string/contact_detail"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.SettleExpenses.NoActionBar" />
+
+        <activity
+            android:name=".ui.detail.expense.ExpenseDetailActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.SettleExpenses.NoActionBar" />
 

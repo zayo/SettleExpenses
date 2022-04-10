@@ -1,13 +1,13 @@
-package com.nislav.settleexpenses.ui.detail
+package com.nislav.settleexpenses.ui.detail.contact
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nislav.settleexpenses.domain.Contact
 import com.nislav.settleexpenses.domain.ContactsRepository
-import com.nislav.settleexpenses.ui.detail.ContactDetailViewModel.ContactState.Data
-import com.nislav.settleexpenses.ui.detail.ContactDetailViewModel.ContactState.Failed
-import com.nislav.settleexpenses.ui.detail.ContactDetailViewModel.ContactState.Init
-import com.nislav.settleexpenses.ui.detail.ContactDetailViewModel.ContactState.Loading
+import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Data
+import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Failed
+import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Init
+import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

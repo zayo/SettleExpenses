@@ -1,4 +1,4 @@
-package com.nislav.settleexpenses.ui.detail
+package com.nislav.settleexpenses.ui.detail.contact
 
 import android.content.Context
 import android.content.Intent
@@ -6,12 +6,11 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.nislav.settleexpenses.databinding.ActivityContactDetailBinding
 import com.nislav.settleexpenses.domain.Contact
-import com.nislav.settleexpenses.ui.detail.ContactDetailViewModel.ContactState
+import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState
 import com.nislav.settleexpenses.util.NoOp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
