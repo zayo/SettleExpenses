@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nislav.settleexpenses.databinding.ViewAddContactSheetBinding
-import com.nislav.settleexpenses.domain.Contact
+import com.nislav.settleexpenses.db.entities.Contact
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

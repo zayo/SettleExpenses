@@ -1,5 +1,6 @@
 package com.nislav.settleexpenses.di
 
+import com.nislav.settleexpenses.db.dao.ContactDao
 import com.nislav.settleexpenses.domain.ContactsRepository
 import com.nislav.settleexpenses.domain.ContactsRepositoryImpl
 import com.nislav.settleexpenses.domain.ExpensesRepository
@@ -17,5 +18,7 @@ object RepositoryModule {
     fun provideExpensesRepository(): ExpensesRepository = ExpensesRepositoryImpl()
 
     @Provides
-    fun provideContactsRepository(): ContactsRepository = ContactsRepositoryImpl()
+    fun provideContactsRepository(
+        dao: ContactDao
+    ): ContactsRepository = ContactsRepositoryImpl(dao)
 }

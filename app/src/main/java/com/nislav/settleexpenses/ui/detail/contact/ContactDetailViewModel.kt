@@ -2,10 +2,9 @@ package com.nislav.settleexpenses.ui.detail.contact
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nislav.settleexpenses.domain.Contact
+import com.nislav.settleexpenses.db.entities.Contact
 import com.nislav.settleexpenses.domain.ContactsRepository
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Data
-import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Failed
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Init
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,9 +32,7 @@ class ContactDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _state.emit(Loading)
             val contact = repository.load(id)
-            val state = contact?.let { Data(it) }
-                ?: Failed(id)
-            _state.emit(state)
+            _state.emit(Data(contact))
         }
     }
 
@@ -44,14 +41,11 @@ class ContactDetailViewModel @Inject constructor(
      *
      * @property Init when [loadContact] needs to be called to initiate flow.
      * @property Loading transition when contact is being loaded.
-     * @property Data when data were loaded successfully.
-     * @property Failed when data were unable to load due to non-existing id passed
-     * into [loadContact].
+     * @property Data when data were loaded.
      */
     sealed class ContactState {
         object Init : ContactState()
         object Loading : ContactState()
         data class Data(val contact: Contact) : ContactState()
-        data class Failed(val id: Long) : ContactState()
     }
 }

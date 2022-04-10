@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nislav.settleexpenses.databinding.ItemContactPickBinding
-import com.nislav.settleexpenses.domain.Contact
+import com.nislav.settleexpenses.db.entities.Contact
 import com.nislav.settleexpenses.getColor
 import com.nislav.settleexpenses.ui.SelectableContactsAdapter.SelectableContact
 import com.nislav.settleexpenses.ui.SelectableContactsAdapter.SelectableContactsViewHolder

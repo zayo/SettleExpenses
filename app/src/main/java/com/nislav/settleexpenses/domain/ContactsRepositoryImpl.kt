@@ -1,34 +1,26 @@
 package com.nislav.settleexpenses.domain
 
+import com.nislav.settleexpenses.db.dao.ContactDao
+import com.nislav.settleexpenses.db.entities.Contact
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 /**
  * Implementation of [ContactsRepository].
  */
-class ContactsRepositoryImpl : ContactsRepository {
-
-    private val _contacts: MutableStateFlow<List<Contact>> =
-        singletonContacts
+class ContactsRepositoryImpl @Inject constructor(
+    private val dao: ContactDao
+) : ContactsRepository {
 
     override val contacts: Flow<List<Contact>>
-        get() = _contacts.map { it.toList() }
+        get() = dao.getAll()
 
-    override suspend fun load(contactId: Long): Contact? =
-        _contacts.value.find { it.id == contactId }
+    override suspend fun load(contactId: Long): Contact =
+        dao.loadById(contactId)
 
-    override suspend fun add(contact: Contact) {
-        _contacts.value = _contacts.value + contact
-    }
+    override suspend fun add(contact: Contact) =
+        dao.insert(contact)
 
-    override suspend fun remove(contact: Contact) {
-        _contacts.value = _contacts.value - contact
-    }
-
-    companion object {
-        // TMP hack until synced through DB
-        private val singletonContacts: MutableStateFlow<List<Contact>> =
-            MutableStateFlow(ExpensesRepositoryImpl.contacts)
-    }
+    override suspend fun remove(contact: Contact) =
+        dao.delete(contact)
 }

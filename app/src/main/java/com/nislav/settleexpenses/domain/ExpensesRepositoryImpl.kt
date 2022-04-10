@@ -1,5 +1,6 @@
 package com.nislav.settleexpenses.domain
 
+import com.nislav.settleexpenses.db.entities.Contact
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map

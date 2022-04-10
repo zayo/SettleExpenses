@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.nislav.settleexpenses.databinding.ActivityContactDetailBinding
-import com.nislav.settleexpenses.domain.Contact
+import com.nislav.settleexpenses.db.entities.Contact
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState
 import com.nislav.settleexpenses.util.NoOp
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,7 +51,6 @@ class ContactDetailActivity : AppCompatActivity() {
                         is ContactState.Init -> NoOp
                         is ContactState.Loading -> NoOp // TODO loading if needed
                         is ContactState.Data -> displayDetail(it.contact)
-                        is ContactState.Failed -> displayErrorAndFinish()
                     }
                 }
         }
@@ -62,11 +61,6 @@ class ContactDetailActivity : AppCompatActivity() {
             firstName.text = contact.firstName
             lastName.text = contact.lastName
         }
-    }
-
-    private fun displayErrorAndFinish() {
-        Toast.makeText(this, "Failed to load contact", Toast.LENGTH_SHORT).show()
-        finish()
     }
 
     companion object {

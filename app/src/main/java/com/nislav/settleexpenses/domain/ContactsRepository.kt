@@ -1,5 +1,6 @@
 package com.nislav.settleexpenses.domain
 
+import com.nislav.settleexpenses.db.entities.Contact
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -15,7 +16,7 @@ interface ContactsRepository {
     /**
      * Loads the contact
      */
-    suspend fun load(contactId: Long): Contact?
+    suspend fun load(contactId: Long): Contact
 
     /**
      * Adds new [contact].

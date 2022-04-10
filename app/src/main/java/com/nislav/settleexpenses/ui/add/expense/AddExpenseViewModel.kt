@@ -2,7 +2,7 @@ package com.nislav.settleexpenses.ui.add.expense
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nislav.settleexpenses.domain.Contact
+import com.nislav.settleexpenses.db.entities.Contact
 import com.nislav.settleexpenses.domain.ContactsRepository
 import com.nislav.settleexpenses.domain.Expense
 import com.nislav.settleexpenses.domain.ExpensesRepository
