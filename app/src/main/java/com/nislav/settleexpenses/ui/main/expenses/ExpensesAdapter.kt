@@ -32,10 +32,13 @@ class ExpensesAdapter(
         private val positionListener: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        private val adapter = InitialsAdapter()
+
         init {
             binding.root.setOnClickListener {
                 positionListener(adapterPosition)
             }
+            binding.recycler.adapter = adapter
         }
 
         @SuppressLint("SetTextI18n")
@@ -43,6 +46,7 @@ class ExpensesAdapter(
             with(binding) {
                 date.text = expense.date
                 name.text = expense.name
+                adapter.submitList(expense.contacts.toList())
                 amount.text = expense.amount.toString()
             }
         }

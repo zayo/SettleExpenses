@@ -29,6 +29,6 @@ class ContactsRepositoryImpl : ContactsRepository {
     companion object {
         // TMP hack until synced through DB
         private val singletonContacts: MutableStateFlow<List<Contact>> =
-            MutableStateFlow(emptyList())
+            MutableStateFlow(ExpensesRepositoryImpl.contacts)
     }
 }

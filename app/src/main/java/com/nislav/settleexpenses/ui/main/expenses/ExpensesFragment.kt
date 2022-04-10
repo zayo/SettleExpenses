@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.nislav.settleexpenses.databinding.FragmentExpensesBinding
+import com.nislav.settleexpenses.ui.add.expense.AddExpenseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -39,7 +40,7 @@ class ExpensesFragment : Fragment() {
             recycler.adapter = adapter
             empty.root.isVisible = true // initially visible
             fabAdd.setOnClickListener {
-                // TODO
+                AddExpenseActivity.startActivity(requireContext())
             }
         }
 

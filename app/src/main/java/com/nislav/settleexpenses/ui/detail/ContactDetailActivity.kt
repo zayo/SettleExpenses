@@ -46,7 +46,7 @@ class ContactDetailActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             viewModel.contactState
-                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                .flowWithLifecycle(lifecycle)
                 .collect {
                     when (it) {
                         is ContactState.Init -> NoOp

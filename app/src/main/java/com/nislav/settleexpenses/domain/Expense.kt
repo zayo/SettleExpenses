@@ -7,5 +7,6 @@ data class Expense(
     val id: Long = System.currentTimeMillis(),
     val name: String,
     val amount: Long,
-    val date: String
+    val date: String,
+    val contacts: Collection<Contact>
 )

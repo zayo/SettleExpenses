@@ -18,6 +18,11 @@ interface ExpensesRepository {
     suspend fun load(expenseId: Long): Expense?
 
     /**
+     * Adds the [Expense].
+     */
+    suspend fun add(expense: Expense)
+
+    /**
      * Removes existing [expense].
      */
     suspend fun remove(expense: Expense)

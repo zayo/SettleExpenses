@@ -22,11 +22,15 @@
 
         <activity
             android:name=".ui.detail.ContactDetailActivity"
-            android:exported="true"
             android:label="@string/contact_detail"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.SettleExpenses.NoActionBar" />
 
-    </application>
+        <activity
+            android:name=".ui.add.expense.AddExpenseActivity"
+            android:label="@string/add_new_expense"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.SettleExpenses.NoActionBar" />
 
+    </application>
 </manifest>

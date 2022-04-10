@@ -35,6 +35,7 @@ class ContactsViewModel @Inject constructor(
      * Holds the current contacts, alphabetically sorted, filtered by [query].
      */
     val contacts = repository.contacts.combine(_query) { contacts, query ->
+        val normalizedQuery = query.normalized()
         contacts
             .asSequence()
             .map { it.searchableName to it }
