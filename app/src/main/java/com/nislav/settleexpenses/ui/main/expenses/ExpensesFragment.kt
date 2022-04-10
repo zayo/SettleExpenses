@@ -4,20 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.nislav.settleexpenses.databinding.FragmentExpensesBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 /**
  * A fragment displaying Expenses.
  */
 @AndroidEntryPoint
 class ExpensesFragment : Fragment() {
+
+    private val adapter = ExpensesAdapter {
+        //ExpenseDetailActivity.startActivity(requireContext(), it.id)
+    }
 
     private var _binding: FragmentExpensesBinding? = null
     private val binding get() = requireNotNull(_binding)
@@ -30,12 +35,20 @@ class ExpensesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.identity.flowWithLifecycle(viewLifecycleOwner.lifecycle).collect {
-                    val prevText = binding.sectionLabel.text
-                    binding.sectionLabel.text = "$prevText\n$it"
-                }
+        with(binding) {
+            recycler.adapter = adapter
+            empty.root.isVisible = true // initially visible
+            fabAdd.setOnClickListener {
+                // TODO
+            }
         }
+
+        viewModel.expenses
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach { data ->
+                binding.empty.root.isVisible = data.isEmpty()
+                adapter.submitList(data)
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun onDestroyView() {

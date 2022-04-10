@@ -17,8 +17,6 @@
     <include
         android:id="@+id/empty"
         layout="@layout/view_empty_contacts"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

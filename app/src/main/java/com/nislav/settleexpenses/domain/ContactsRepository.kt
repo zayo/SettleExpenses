@@ -3,7 +3,7 @@ package com.nislav.settleexpenses.domain
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Repository for Contacts and related operation.
+ * Repository for [Contacts] and related operation.
  */
 interface ContactsRepository {
 

@@ -16,5 +16,6 @@ class ExpensesViewModel @Inject constructor(
     private val repository: ExpensesRepository
 ) : ViewModel() {
 
-    val identity = repository.identity.stateIn(viewModelScope, SharingStarted.Lazily, "")
+    val expenses = repository.expenses
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 }

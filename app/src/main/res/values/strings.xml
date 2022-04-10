@@ -11,4 +11,6 @@
     <string name="contact_detail">Contact Detail</string>
     <string name="owes_you">Owes you</string>
     <string name="expenses">Expenses</string>
+    <string name="empty_expenses">So far no expense was made.\nCreate one by tapping \'+\'.</string>
+    <string name="currency_dollar">$</string>
 </resources>
