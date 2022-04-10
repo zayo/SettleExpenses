@@ -23,6 +23,8 @@ private val colors = arrayOf(
     0xff90a4ae
 )
 
+const val COLOR_DISABLED = 0xffbbc1cc.toInt()
+
 /**
  * Gets the given [key] hashed into color.
  */

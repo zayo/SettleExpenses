@@ -1,11 +1,11 @@
 package com.nislav.settleexpenses.ui.main.expenses
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.nislav.settleexpenses.R
 import com.nislav.settleexpenses.databinding.ItemExpenseBinding
 import com.nislav.settleexpenses.domain.ExpenseWithContacts
 
@@ -39,15 +39,21 @@ class ExpensesAdapter(
                 positionListener(adapterPosition)
             }
             binding.recycler.adapter = adapter
+            binding.recycler.suppressLayout(true) // Disallow consuming clicks.
         }
 
-        @SuppressLint("SetTextI18n")
         fun bind(expense: ExpenseWithContacts) {
             with(binding) {
                 date.text = expense.expense.date
                 name.text = expense.expense.name
-                adapter.submitList(expense.contacts.map { it.contact })
+                adapter.submitList(expense.contacts)
                 amount.text = expense.expense.amount.toString()
+
+                if (expense.contacts.all { it.paid }) {
+                    root.setBackgroundResource(R.drawable.bg_expense_settled)
+                } else {
+                    root.setBackgroundResource(R.drawable.bg_expense)
+                }
             }
         }
     }

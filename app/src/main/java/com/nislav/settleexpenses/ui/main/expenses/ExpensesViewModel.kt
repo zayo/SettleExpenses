@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.nislav.settleexpenses.domain.ExpensesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
@@ -17,5 +18,6 @@ class ExpensesViewModel @Inject constructor(
 ) : ViewModel() {
 
     val expenses = repository.expenses
+        .map { list -> list.sortedBy { it.contacts.all { it.paid } } }
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 }
