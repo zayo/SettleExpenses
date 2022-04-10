@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.nislav.settleexpenses.db.entities.ExpenseContactRelation
 
 @Dao
@@ -18,6 +19,12 @@ interface ExpenseContactDao {
     @Query("SELECT * FROM ExpenseContactRelation WHERE expense_id = :expenseId")
     suspend fun getForExpense(expenseId: Long): List<ExpenseContactRelation>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(relation: ExpenseContactRelation)
+    @Insert
+    suspend fun insert(relation: List<ExpenseContactRelation>)
+
+    @Update
+    suspend fun update(relation: ExpenseContactRelation)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun update(relation: List<ExpenseContactRelation>)
 }

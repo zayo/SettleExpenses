@@ -26,6 +26,7 @@ interface ContactsRepository {
     /**
      * Removes existing [contact].
      */
+    @Deprecated(message = "Makes no sense, would break everything.", level = DeprecationLevel.ERROR)
     suspend fun remove(contact: Contact)
 
     /**

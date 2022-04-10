@@ -27,6 +27,7 @@ class ExpensesRepositoryImpl @Inject constructor(
             it.map { load(it.id) }
         }
 
+    // FIXME: far from OK, needs better DB schema
     override suspend fun load(expenseId: Long): ExpenseWithContacts =
         withContext(Dispatchers.Default) {
             val expense = async { expenseDao.loadById(expenseId) }
@@ -44,26 +45,22 @@ class ExpensesRepositoryImpl @Inject constructor(
 
     override suspend fun add(expense: Expense, contacts: List<Contact>) {
         val expenseId = expenseDao.insert(expense)
-        contacts.forEach {
-            statesDao.insert(ExpenseContactRelation(
-                expenseId = expenseId,
-                contactId = it.id
-            ))
+        val relations = contacts.map {
+            ExpenseContactRelation(expenseId, it.id)
         }
+        statesDao.insert(relations)
     }
 
     override suspend fun togglePaid(expenseId: Long, contactId: Long) =
         withContext(Dispatchers.Default) {
             val state = statesDao.get(contactId, expenseId)
-            statesDao.insert(state.copy(paid = !state.paid))
+            statesDao.update(state.copy(paid = !state.paid))
         }
 
     override suspend fun settleAll(expenseId: Long) =
         withContext(Dispatchers.Default) {
-            val states = statesDao.getForExpense(expenseId)
-            states.forEach {
-                statesDao.insert(it.copy(paid = true))
-            }
+            val states = statesDao.getForExpense(expenseId).map { it.copy(paid = true) }
+            statesDao.update(states)
         }
 }
 

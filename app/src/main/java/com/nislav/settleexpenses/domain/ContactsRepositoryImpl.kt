@@ -22,6 +22,7 @@ class ContactsRepositoryImpl @Inject constructor(
     override val contacts: Flow<List<Contact>>
         get() = contactDao.getAll()
 
+    // FIXME: far from OK, needs better DB schema
     override suspend fun load(contactId: Long): ContactWithExpenses =
         withContext(Dispatchers.Default) {
             val contact = async { contactDao.loadById(contactId) }
@@ -40,9 +41,12 @@ class ContactsRepositoryImpl @Inject constructor(
     override suspend fun add(contact: Contact): Long =
         contactDao.insert(contact)
 
+    // FIXME: far from OK, needs better DB schema, like "archive" contact, but keep for
+    //  consistency of other objects/relations.
     override suspend fun remove(contact: Contact) =
         contactDao.delete(contact)
 
+    // FIXME: far from OK, needs better DB schema
     override suspend fun calculateDebt(contactId: Long): Long {
         val expenses = expenseDao.getExpensesForContact(contactId)
         return expenses.sumOf {

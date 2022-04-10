@@ -24,7 +24,4 @@ interface ExpenseDao {
 
     @Insert
     suspend fun insert(expense: Expense): Long
-
-    @Delete
-    suspend fun delete(expense: Expense)
 }
