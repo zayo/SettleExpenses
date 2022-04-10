@@ -42,4 +42,13 @@ class ContactsRepositoryImpl @Inject constructor(
 
     override suspend fun remove(contact: Contact) =
         contactDao.delete(contact)
+
+    override suspend fun calculateDebt(contactId: Long): Long {
+        val expenses = expenseDao.getExpensesForContact(contactId)
+        return expenses.sumOf {
+            val contacts = statesDao.getForExpense(it.id)
+            val price = it.amount.div(contacts.size)
+            price.takeIf { contacts.any { it.contactId == contactId && !it.paid } } ?: 0L
+        }
+    }
 }

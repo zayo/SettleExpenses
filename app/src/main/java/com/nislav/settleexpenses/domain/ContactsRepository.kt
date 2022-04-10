@@ -27,4 +27,9 @@ interface ContactsRepository {
      * Removes existing [contact].
      */
     suspend fun remove(contact: Contact)
+
+    /**
+     * Calculates debt of [contactId].
+     */
+    suspend fun calculateDebt(contactId: Long): Long
 }

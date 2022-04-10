@@ -8,6 +8,7 @@ import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.Contac
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Init
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,8 +32,9 @@ class ContactDetailViewModel @Inject constructor(
     fun loadContact(id: Long) {
         viewModelScope.launch {
             _state.emit(Loading)
-            val contact = repository.load(id)
-            _state.emit(Data(contact))
+            val contact = async { repository.load(id) }
+            val debt = async { repository.calculateDebt(id) }
+            _state.emit(Data(contact.await(), debt.await()))
         }
     }
 
@@ -46,6 +48,6 @@ class ContactDetailViewModel @Inject constructor(
     sealed class ContactState {
         object Init : ContactState()
         object Loading : ContactState()
-        data class Data(val contact: ContactWithExpenses) : ContactState()
+        data class Data(val contact: ContactWithExpenses, val debt: Long) : ContactState()
     }
 }
