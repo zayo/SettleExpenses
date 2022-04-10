@@ -2,10 +2,10 @@ package com.nislav.settleexpenses.ui.add.expense
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nislav.settleexpenses.db.entities.Contact
 import com.nislav.settleexpenses.db.entities.Expense
 import com.nislav.settleexpenses.domain.ContactsRepository
 import com.nislav.settleexpenses.domain.ExpensesRepository
+import com.nislav.settleexpenses.domain.name
 import com.nislav.settleexpenses.ui.SelectableContactsAdapter.SelectableContact
 import com.nislav.settleexpenses.util.Signal
 import com.nislav.settleexpenses.util.normalized
@@ -60,7 +60,7 @@ class AddExpenseViewModel @Inject constructor(
         val normalizedQuery = query.normalized()
         contacts
             .asSequence()
-            .map { it.searchableName to it }
+            .map { it.name.normalized() to it }
             .filter { (searchableName, _) -> normalizedQuery in searchableName }
             .sortedBy { (searchableName, _) -> searchableName }
             .map { (_, contact) -> contact }
@@ -113,8 +113,5 @@ class AddExpenseViewModel @Inject constructor(
         }
     }
 }
-
-private val Contact.searchableName
-    get() = "${firstName.normalized()} ${lastName.normalized()}"
 
 private val DATE_FORMAT = SimpleDateFormat.getDateInstance()

@@ -9,6 +9,7 @@ import com.nislav.settleexpenses.COLOR_DISABLED
 import com.nislav.settleexpenses.databinding.ItemContactIconBinding
 import com.nislav.settleexpenses.db.entities.Contact
 import com.nislav.settleexpenses.domain.ContactWithState
+import com.nislav.settleexpenses.domain.initials
 import com.nislav.settleexpenses.getColor
 
 /**
@@ -39,9 +40,6 @@ class InitialsAdapter : ListAdapter<ContactWithState, InitialsAdapter.InitialsVi
         }
     }
 }
-
-private val Contact.initials
-    inline get() = "${firstName.first()}${lastName.first()}".uppercase()
 
 private class Differ2 : DiffUtil.ItemCallback<ContactWithState>() {
     override fun areItemsTheSame(oldItem: ContactWithState, newItem: ContactWithState): Boolean =

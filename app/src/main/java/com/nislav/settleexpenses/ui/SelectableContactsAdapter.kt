@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nislav.settleexpenses.databinding.ItemContactPickBinding
 import com.nislav.settleexpenses.db.entities.Contact
+import com.nislav.settleexpenses.domain.initials
+import com.nislav.settleexpenses.domain.name
 import com.nislav.settleexpenses.getColor
 import com.nislav.settleexpenses.ui.SelectableContactsAdapter.SelectableContact
 import com.nislav.settleexpenses.ui.SelectableContactsAdapter.SelectableContactsViewHolder
@@ -68,9 +70,3 @@ class SelectableContactsAdapter(
         val selected: Boolean = false
     )
 }
-
-private val Contact.initials
-    inline get() = "${firstName.first()}${lastName.first()}".uppercase()
-
-private val Contact.name
-    inline get() = "$firstName $lastName"

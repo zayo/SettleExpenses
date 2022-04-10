@@ -2,10 +2,10 @@ package com.nislav.settleexpenses.ui.detail.expense
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nislav.settleexpenses.db.entities.Contact
 import com.nislav.settleexpenses.db.entities.Expense
 import com.nislav.settleexpenses.domain.ExpenseWithContacts
 import com.nislav.settleexpenses.domain.ExpensesRepository
+import com.nislav.settleexpenses.domain.name
 import com.nislav.settleexpenses.ui.SelectableContactsAdapter.SelectableContact
 import com.nislav.settleexpenses.util.normalized
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,7 +35,7 @@ class ExpenseDetailViewModel @Inject constructor(
         get() = _expense.filterNotNull().map { (expense, contactsWithStates) ->
             val contacts = contactsWithStates
                 .asSequence()
-                .sortedBy { it.contact.searchableName }
+                .sortedBy { it.contact.name.normalized() }
                 .map { SelectableContact(it.contact, it.paid) }
                 .sortedBy { it.selected }
                 .toList()
@@ -80,7 +80,7 @@ class ExpenseDetailViewModel @Inject constructor(
     }
 
     /**
-     * Represents [Expense] detail.
+     * Represents [Expense] detail precalculated.
      */
     data class ExpenseDetail(
         val name: String,
@@ -89,6 +89,3 @@ class ExpenseDetailViewModel @Inject constructor(
         val participants: List<SelectableContact>
     )
 }
-
-private val Contact.searchableName
-    get() = "${firstName.normalized()} ${lastName.normalized()}"

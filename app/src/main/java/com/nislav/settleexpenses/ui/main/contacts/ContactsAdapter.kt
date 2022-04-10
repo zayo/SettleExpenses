@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nislav.settleexpenses.databinding.ItemContactBinding
 import com.nislav.settleexpenses.db.entities.Contact
+import com.nislav.settleexpenses.domain.initials
+import com.nislav.settleexpenses.domain.name
 import com.nislav.settleexpenses.getColor
 
 /**
@@ -49,12 +51,6 @@ class ContactsAdapter(
         }
     }
 }
-
-private val Contact.initials
-    inline get() = "${firstName.first()}${lastName.first()}".uppercase()
-
-private val Contact.name
-    inline get() = "$firstName $lastName"
 
 private class Differ : DiffUtil.ItemCallback<Contact>() {
     override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean =

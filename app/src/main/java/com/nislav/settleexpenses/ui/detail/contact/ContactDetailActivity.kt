@@ -8,8 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.nislav.settleexpenses.databinding.ActivityContactDetailBinding
-import com.nislav.settleexpenses.db.entities.Contact
 import com.nislav.settleexpenses.domain.ContactWithExpenses
+import com.nislav.settleexpenses.domain.name
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState
 import com.nislav.settleexpenses.ui.detail.expense.ExpenseDetailActivity
 import com.nislav.settleexpenses.util.NoOp
@@ -84,8 +84,5 @@ class ContactDetailActivity : AppCompatActivity() {
         }
     }
 }
-
-private val Contact.name
-    inline get() = "$firstName $lastName"
 
 private const val EXTRA_CONTACT_ID = "contact_id"
