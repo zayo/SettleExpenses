@@ -16,12 +16,12 @@ interface ContactsRepository {
     /**
      * Loads the contact
      */
-    suspend fun load(contactId: Long): Contact
+    suspend fun load(contactId: Long): ContactWithExpenses
 
     /**
      * Adds new [contact].
      */
-    suspend fun add(contact: Contact)
+    suspend fun add(contact: Contact): Long
 
     /**
      * Removes existing [contact].

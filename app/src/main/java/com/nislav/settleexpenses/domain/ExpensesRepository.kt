@@ -1,5 +1,7 @@
 package com.nislav.settleexpenses.domain
 
+import com.nislav.settleexpenses.db.entities.Contact
+import com.nislav.settleexpenses.db.entities.Expense
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -8,22 +10,27 @@ import kotlinx.coroutines.flow.Flow
 interface ExpensesRepository {
 
     /**
-     * Holds list of all expenses.
+     * Holds list of all [ExpenseWithContacts].
      */
-    val expenses: Flow<List<Expense>>
+    val expenses: Flow<List<ExpenseWithContacts>>
 
     /**
-     * Loads the Expense based on [expenseId].
+     * Loads the [ExpenseWithContacts] based on [expenseId].
      */
-    suspend fun load(expenseId: Long): Expense?
+    suspend fun load(expenseId: Long): ExpenseWithContacts
 
     /**
      * Adds the [Expense].
      */
-    suspend fun add(expense: Expense)
+    suspend fun add(expense: Expense, contacts: List<Contact>)
 
     /**
-     * Removes existing [expense].
+     * Switches the paid state of the [contactId] for the [expenseId].
      */
-    suspend fun remove(expense: Expense)
+    suspend fun togglePaid(expenseId: Long, contactId: Long)
+
+    /**
+     * Marks all states as paid of all contacts for [expenseId].
+     */
+    suspend fun settleAll(expenseId: Long)
 }

@@ -3,8 +3,8 @@ package com.nislav.settleexpenses.ui.add.expense
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nislav.settleexpenses.db.entities.Contact
+import com.nislav.settleexpenses.db.entities.Expense
 import com.nislav.settleexpenses.domain.ContactsRepository
-import com.nislav.settleexpenses.domain.Expense
 import com.nislav.settleexpenses.domain.ExpensesRepository
 import com.nislav.settleexpenses.ui.SelectableContactsAdapter.SelectableContact
 import com.nislav.settleexpenses.util.Signal
@@ -106,8 +106,8 @@ class AddExpenseViewModel @Inject constructor(
                     name = expenseName,
                     amount = price.toLong(),
                     date = DATE_FORMAT.format(Date(System.currentTimeMillis())),
-                    contacts = contacts.first().filter { it.selected }.map { it.contact }
-                )
+                ),
+                contacts.first().filter { it.selected }.map { it.contact }
             )
             _saveCompletable.complete(Signal)
         }

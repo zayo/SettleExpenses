@@ -3,15 +3,16 @@ package com.nislav.settleexpenses.ui.detail.expense
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nislav.settleexpenses.db.entities.Contact
-import com.nislav.settleexpenses.domain.Expense
+import com.nislav.settleexpenses.db.entities.Expense
+import com.nislav.settleexpenses.domain.ExpenseWithContacts
 import com.nislav.settleexpenses.domain.ExpensesRepository
 import com.nislav.settleexpenses.ui.SelectableContactsAdapter.SelectableContact
 import com.nislav.settleexpenses.util.normalized
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,21 +24,22 @@ class ExpenseDetailViewModel @Inject constructor(
     private val expensesRepository: ExpensesRepository
 ) : ViewModel() {
 
-    private val _contactsSelection = MutableStateFlow(emptySet<Long>())
-    private val _expense: MutableStateFlow<Expense?> = MutableStateFlow(null)
+    private val _expense: MutableStateFlow<ExpenseWithContacts?> = MutableStateFlow(null)
+
+    private var expenseId: Long = 0
 
     /**
      * Holds the current [ExpenseDetail].
      */
     val expenseDetail: Flow<ExpenseDetail>
-        get() = _expense.filterNotNull().combine(_contactsSelection) { expense, selection ->
-            val contacts = expense.contacts
+        get() = _expense.filterNotNull().map { (expense, contactsWithStates) ->
+            val contacts = contactsWithStates
                 .asSequence()
-                .sortedBy { it.searchableName }
-                .map { SelectableContact(it, it.id in selection) }
+                .sortedBy { it.contact.searchableName }
+                .map { SelectableContact(it.contact, it.paid) }
                 .sortedBy { it.selected }
                 .toList()
-            val fraction = expense.amount.div(expense.contacts.size)
+            val fraction = expense.amount.div(contacts.size)
             val price = contacts.count { !it.selected } * fraction
             ExpenseDetail(
                 expense.name,
@@ -51,20 +53,19 @@ class ExpenseDetailViewModel @Inject constructor(
      * Loads the [Expense] with provided [id].
      */
     fun loadExpense(id: Long) {
+        expenseId = id
         viewModelScope.launch {
             _expense.value = expensesRepository.load(id)
-                ?: error("Expense with id= [$id] not found!")
         }
     }
 
     /**
      * Selects or deselects contact.
      */
-    fun toggleSelection(selectableContact: SelectableContact) {
-        _contactsSelection.value = if (selectableContact.selected) {
-            _contactsSelection.value - selectableContact.contact.id
-        } else {
-            _contactsSelection.value + selectableContact.contact.id
+    fun togglePaid(selectableContact: SelectableContact) {
+        viewModelScope.launch {
+            expensesRepository.togglePaid(expenseId, selectableContact.contact.id)
+            loadExpense(expenseId)
         }
     }
 
@@ -73,7 +74,8 @@ class ExpenseDetailViewModel @Inject constructor(
      */
     fun settle() {
         viewModelScope.launch {
-            _contactsSelection.value = requireNotNull(_expense.value).contacts.map { it.id }.toSet()
+            expensesRepository.settleAll(expenseId)
+            loadExpense(expenseId)
         }
     }
 

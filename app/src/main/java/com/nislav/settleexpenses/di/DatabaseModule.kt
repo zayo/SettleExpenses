@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.nislav.settleexpenses.db.AppDatabase
 import com.nislav.settleexpenses.db.dao.ContactDao
+import com.nislav.settleexpenses.db.dao.ExpenseContactDao
 import com.nislav.settleexpenses.db.dao.ExpenseDao
 import dagger.Module
 import dagger.Provides
@@ -22,8 +23,11 @@ object DatabaseModule {
         Room.databaseBuilder(context, AppDatabase::class.java, AppDatabase.DATABASE_NAME).build()
 
     @Provides
+    fun provideContactDao(database: AppDatabase): ContactDao = database.contactDao()
+
+    @Provides
     fun provideExpenseDao(database: AppDatabase): ExpenseDao = database.expenseDao()
 
     @Provides
-    fun provideContactDao(database: AppDatabase): ContactDao = database.contactDao()
+    fun provideExpenseContactDao(database: AppDatabase): ExpenseContactDao = database.expenseContactDao()
 }

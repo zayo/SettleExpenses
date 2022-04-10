@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class ExpenseDetailActivity : AppCompatActivity() {
 
     private val adapter = SelectableContactsAdapter {
-        viewModel.toggleSelection(it)
+        viewModel.togglePaid(it)
     }
 
     private var _binding: ActivityExpenseDetailBinding? = null

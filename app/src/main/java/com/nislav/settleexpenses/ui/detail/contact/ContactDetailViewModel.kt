@@ -2,7 +2,7 @@ package com.nislav.settleexpenses.ui.detail.contact
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nislav.settleexpenses.db.entities.Contact
+import com.nislav.settleexpenses.domain.ContactWithExpenses
 import com.nislav.settleexpenses.domain.ContactsRepository
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Data
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Init
@@ -46,6 +46,6 @@ class ContactDetailViewModel @Inject constructor(
     sealed class ContactState {
         object Init : ContactState()
         object Loading : ContactState()
-        data class Data(val contact: Contact) : ContactState()
+        data class Data(val contact: ContactWithExpenses) : ContactState()
     }
 }

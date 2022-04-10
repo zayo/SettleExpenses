@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nislav.settleexpenses.databinding.ItemExpenseBinding
-import com.nislav.settleexpenses.domain.Expense
+import com.nislav.settleexpenses.domain.ExpenseWithContacts
 
 /**
- * Responsible for displaying list of [Expense].
+ * Responsible for displaying list of [ExpenseWithContacts].
  */
 class ExpensesAdapter(
-    private val itemListener: (Expense) -> Unit
-) : ListAdapter<Expense, ExpensesAdapter.ExpensesViewHolder>(Differ()) {
+    private val itemListener: (ExpenseWithContacts) -> Unit
+) : ListAdapter<ExpenseWithContacts, ExpensesAdapter.ExpensesViewHolder>(Differ()) {
 
     private val clickDelegate: (Int) -> Unit = { position -> itemListener(getItem(position)) }
 
@@ -42,21 +42,21 @@ class ExpensesAdapter(
         }
 
         @SuppressLint("SetTextI18n")
-        fun bind(expense: Expense) {
+        fun bind(expense: ExpenseWithContacts) {
             with(binding) {
-                date.text = expense.date
-                name.text = expense.name
-                adapter.submitList(expense.contacts.toList())
-                amount.text = expense.amount.toString()
+                date.text = expense.expense.date
+                name.text = expense.expense.name
+                adapter.submitList(expense.contacts.map { it.contact })
+                amount.text = expense.expense.amount.toString()
             }
         }
     }
 }
 
-private class Differ : DiffUtil.ItemCallback<Expense>() {
-    override fun areItemsTheSame(oldItem: Expense, newItem: Expense): Boolean =
-        oldItem.id == newItem.id
+private class Differ : DiffUtil.ItemCallback<ExpenseWithContacts>() {
+    override fun areItemsTheSame(oldItem: ExpenseWithContacts, newItem: ExpenseWithContacts): Boolean =
+        oldItem.expense.id == newItem.expense.id
 
-    override fun areContentsTheSame(oldItem: Expense, newItem: Expense): Boolean =
+    override fun areContentsTheSame(oldItem: ExpenseWithContacts, newItem: ExpenseWithContacts): Boolean =
         oldItem == newItem
 }

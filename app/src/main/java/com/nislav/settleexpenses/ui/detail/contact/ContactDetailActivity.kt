@@ -3,13 +3,12 @@ package com.nislav.settleexpenses.ui.detail.contact
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.nislav.settleexpenses.databinding.ActivityContactDetailBinding
-import com.nislav.settleexpenses.db.entities.Contact
+import com.nislav.settleexpenses.domain.ContactWithExpenses
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState
 import com.nislav.settleexpenses.util.NoOp
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,10 +55,10 @@ class ContactDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun displayDetail(contact: Contact) {
+    private fun displayDetail(detail: ContactWithExpenses) {
         with(binding) {
-            firstName.text = contact.firstName
-            lastName.text = contact.lastName
+            firstName.text = detail.contact.firstName
+            lastName.text = detail.contact.lastName
         }
     }
 

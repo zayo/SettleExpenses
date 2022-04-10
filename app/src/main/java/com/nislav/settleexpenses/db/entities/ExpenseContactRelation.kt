@@ -9,5 +9,5 @@ data class ExpenseContactRelation(
     val expenseId: Long,
     @ColumnInfo(name = "contact_id")
     val contactId: Long,
-    val paid: Boolean,
+    val paid: Boolean = false,
 )

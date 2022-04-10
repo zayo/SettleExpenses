@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.onEach
 class ExpensesFragment : Fragment() {
 
     private val adapter = ExpensesAdapter {
-        ExpenseDetailActivity.startActivity(requireContext(), it.id)
+        ExpenseDetailActivity.startActivity(requireContext(), it.expense.id)
     }
 
     private var _binding: FragmentExpensesBinding? = null
