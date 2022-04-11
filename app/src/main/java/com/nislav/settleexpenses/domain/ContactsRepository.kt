@@ -11,7 +11,7 @@ interface ContactsRepository {
     /**
      * Holds current contacts.
      */
-    val contacts: Flow<List<Contact>>
+    suspend fun getContacts(): List<Contact>
 
     /**
      * Loads the contact

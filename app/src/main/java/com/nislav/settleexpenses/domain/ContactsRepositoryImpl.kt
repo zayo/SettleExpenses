@@ -6,7 +6,6 @@ import com.nislav.settleexpenses.db.dao.ExpenseDao
 import com.nislav.settleexpenses.db.entities.Contact
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -19,8 +18,7 @@ class ContactsRepositoryImpl @Inject constructor(
     private val statesDao: ExpenseContactDao,
 ) : ContactsRepository {
 
-    override val contacts: Flow<List<Contact>>
-        get() = contactDao.getAll()
+    override suspend fun getContacts(): List<Contact> = contactDao.getAll()
 
     // FIXME: far from OK, needs better DB schema
     override suspend fun load(contactId: Long): ContactWithExpenses =

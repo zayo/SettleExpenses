@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -56,9 +57,9 @@ class AddExpenseViewModel @Inject constructor(
     /**
      * Holds the current contacts, alphabetically sorted, filtered by [query].
      */
-    val contacts = contactsRepository.contacts.combine(_query) { contacts, query ->
+    val contacts = _query.map { query ->
         val normalizedQuery = query.normalized()
-        contacts
+        contactsRepository.getContacts()
             .asSequence()
             .map { it.name.normalized() to it }
             .filter { (searchableName, _) -> normalizedQuery in searchableName }

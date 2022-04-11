@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ContactDao {
     @Query("SELECT * FROM contact")
-    fun getAll(): Flow<List<Contact>>
+    suspend fun getAll(): List<Contact>
 
     @Query("""
         SELECT * FROM contact WHERE id IN (

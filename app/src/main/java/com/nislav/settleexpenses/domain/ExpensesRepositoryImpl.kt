@@ -8,8 +8,6 @@ import com.nislav.settleexpenses.db.entities.Expense
 import com.nislav.settleexpenses.db.entities.ExpenseContactRelation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -22,9 +20,8 @@ class ExpensesRepositoryImpl @Inject constructor(
     private val statesDao: ExpenseContactDao,
 ) : ExpensesRepository {
 
-    override val expenses: Flow<List<ExpenseWithContacts>>
-        get() = expenseDao.getAll().map {
-            it.map { load(it.id) }
+    override suspend fun getExpenses(): List<ExpenseWithContacts> = expenseDao.getAll().map {
+            load(it.id)
         }
 
     // FIXME: far from OK, needs better DB schema

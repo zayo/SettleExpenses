@@ -12,7 +12,7 @@ interface ExpensesRepository {
     /**
      * Holds list of all [ExpenseWithContacts].
      */
-    val expenses: Flow<List<ExpenseWithContacts>>
+    suspend fun getExpenses(): List<ExpenseWithContacts>
 
     /**
      * Loads the [ExpenseWithContacts] based on [expenseId].
