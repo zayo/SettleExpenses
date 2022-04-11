@@ -10,6 +10,7 @@ import com.nislav.settleexpenses.databinding.ItemContactIconBinding
 import com.nislav.settleexpenses.db.entities.Contact
 import com.nislav.settleexpenses.domain.ContactWithState
 import com.nislav.settleexpenses.domain.initials
+import com.nislav.settleexpenses.domain.name
 import com.nislav.settleexpenses.getColor
 
 /**
@@ -33,7 +34,7 @@ class InitialsAdapter : ListAdapter<ContactWithState, InitialsAdapter.InitialsVi
                 if (contact.paid) {
                     initialsBg.setColorFilter(COLOR_DISABLED)
                 } else {
-                    initialsBg.setColorFilter(getColor(contact))
+                    initialsBg.setColorFilter(getColor(contact.contact.name))
                 }
                 initials.text = contact.contact.initials
             }

@@ -11,6 +11,7 @@ import com.nislav.settleexpenses.db.entities.Contact
 import com.nislav.settleexpenses.domain.initials
 import com.nislav.settleexpenses.domain.name
 import com.nislav.settleexpenses.getColor
+import dagger.hilt.internal.aggregatedroot.codegen._com_nislav_settleexpenses_App
 
 /**
  * Responsible for displaying list of [Contact].
@@ -44,9 +45,10 @@ class ContactsAdapter(
         @SuppressLint("SetTextI18n")
         fun bind(contact: Contact) {
             with(binding) {
-                initialsBg.setColorFilter(getColor(contact))
+                val contactName = contact.name
+                initialsBg.setColorFilter(getColor(contactName))
                 initials.text = contact.initials
-                name.text = contact.name
+                name.text = contactName
             }
         }
     }

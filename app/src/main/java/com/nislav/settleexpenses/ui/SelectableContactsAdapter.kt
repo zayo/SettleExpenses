@@ -46,9 +46,10 @@ class SelectableContactsAdapter(
         @SuppressLint("SetTextI18n")
         fun bind(contact: SelectableContact) {
             with(binding) {
-                initialsBg.setColorFilter(getColor(contact.contact))
+                val contactName = contact.contact.name
+                initialsBg.setColorFilter(getColor(contactName))
                 initials.text = contact.contact.initials
-                name.text = contact.contact.name
+                name.text = contactName
                 checkbox.isChecked = contact.selected
             }
         }
