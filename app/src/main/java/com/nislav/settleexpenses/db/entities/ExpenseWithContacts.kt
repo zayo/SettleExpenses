@@ -4,6 +4,9 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 
+/**
+ * Represents [expense] with [contacts]. Uses [ContactWithState] database view.
+ */
 data class ExpenseWithContacts(
     @Embedded val expense: Expense,
     @Relation(

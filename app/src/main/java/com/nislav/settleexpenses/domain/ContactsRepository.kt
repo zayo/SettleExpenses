@@ -27,5 +27,5 @@ interface ContactsRepository {
     /**
      * Calculates debt of [contactId].
      */
-    suspend fun calculateDebt(contactId: Long): Long
+    fun loadDebt(contactId: Long): Flow<Long>
 }

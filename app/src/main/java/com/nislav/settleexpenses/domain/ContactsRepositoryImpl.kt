@@ -4,6 +4,7 @@ import com.nislav.settleexpenses.db.dao.ContactDao
 import com.nislav.settleexpenses.db.entities.Contact
 import com.nislav.settleexpenses.db.entities.ContactWithExpenses
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
@@ -22,14 +23,10 @@ class ContactsRepositoryImpl @Inject constructor(
     override suspend fun add(contact: Contact): Long =
         contactDao.insert(contact)
 
-    // FIXME: far from OK, needs better DB schema
-    override suspend fun calculateDebt(contactId: Long): Long {
-//        val expenses = expenseDao.getExpensesForContact(contactId)
-//        return expenses.sumOf {
-//            val contacts = statesDao.getForExpense(it.id)
-//            val price = it.amount.div(contacts.size)
-//            price.takeIf { contacts.any { it.contactId == contactId && !it.paid } } ?: 0L
-//        }
-        return 666L
-    }
+    override fun loadDebt(contactId: Long): Flow<Long> =
+        contactDao.debtOf(contactId).map {
+            // In case everything is paid, there will be null returned from the DB.
+            // It can be solved in the DB, but this is easier than in SQL lang.
+            it ?: 0L
+        }
 }

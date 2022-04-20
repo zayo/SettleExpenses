@@ -11,7 +11,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
 /**
@@ -23,12 +23,13 @@ class ContactDetailViewModel @AssistedInject constructor(
 ) : ViewModel() {
 
     @AssistedFactory
-    interface Factory { fun create(contactId: Long): ContactDetailViewModel }
+    interface Factory {
+        fun create(contactId: Long): ContactDetailViewModel
+    }
 
-    val detail: StateFlow<ContactState> = repository.load(contactId).map {
-            val debt = repository.calculateDebt(contactId)
-            Data(it, debt)
-        }.stateIn(viewModelScope, SharingStarted.Eagerly, Loading)
+    val detail: StateFlow<ContactState> = repository.load(contactId)
+        .combine(repository.loadDebt(contactId), ::Data)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, Loading)
 
     /**
      * States of Contact loading.

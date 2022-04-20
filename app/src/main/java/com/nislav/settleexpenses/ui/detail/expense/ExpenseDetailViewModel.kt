@@ -39,7 +39,7 @@ class ExpenseDetailViewModel @AssistedInject constructor(
                 .sortedBy { it.name.normalized() }
                 .sortedBy { it.paid }
                 .toList()
-            val fraction = expense.expense.amount.div(contacts.size)
+            val fraction = expense.expense.amount.div(contacts.size.coerceAtLeast(1))
             val price = contacts.count { !it.paid } * fraction
             ExpenseDetail(
                 expense.expense.name,
