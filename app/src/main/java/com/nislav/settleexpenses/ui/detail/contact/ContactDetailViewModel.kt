@@ -2,51 +2,41 @@ package com.nislav.settleexpenses.ui.detail.contact
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nislav.settleexpenses.domain.ContactWithExpenses
+import com.nislav.settleexpenses.db.entities.ContactWithExpenses
 import com.nislav.settleexpenses.domain.ContactsRepository
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Data
-import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Init
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Loading
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableStateFlow
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 /**
  * ViewModel for the contact detail fragment.
  */
-@HiltViewModel
-class ContactDetailViewModel @Inject constructor(
-    private val repository: ContactsRepository
+class ContactDetailViewModel @AssistedInject constructor(
+    private val repository: ContactsRepository,
+    @Assisted private val contactId: Long
 ) : ViewModel() {
 
-    private val _state: MutableStateFlow<ContactState> =
-        MutableStateFlow(Init)
+    @AssistedFactory
+    interface Factory { fun create(contactId: Long): ContactDetailViewModel }
 
-    val contactState: StateFlow<ContactState> =
-        _state.asStateFlow()
-
-    fun loadContact(id: Long) {
-        viewModelScope.launch {
-            _state.emit(Loading)
-            val contact = async { repository.load(id) }
-            val debt = async { repository.calculateDebt(id) }
-            _state.emit(Data(contact.await(), debt.await()))
-        }
-    }
+    val detail: StateFlow<ContactState> = repository.load(contactId).map {
+            val debt = repository.calculateDebt(contactId)
+            Data(it, debt)
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, Loading)
 
     /**
      * States of Contact loading.
      *
-     * @property Init when [loadContact] needs to be called to initiate flow.
      * @property Loading transition when contact is being loaded.
      * @property Data when data were loaded.
      */
     sealed class ContactState {
-        object Init : ContactState()
         object Loading : ContactState()
         data class Data(val contact: ContactWithExpenses, val debt: Long) : ContactState()
     }

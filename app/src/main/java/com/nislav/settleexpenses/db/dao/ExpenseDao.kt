@@ -4,23 +4,21 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import com.nislav.settleexpenses.db.entities.Expense
+import com.nislav.settleexpenses.db.entities.ExpenseWithContacts
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExpenseDao {
-    @Query("SELECT * FROM expense")
-    suspend fun getAll(): List<Expense>
 
-    @Query("""
-        SELECT * FROM Expense WHERE id IN (
-           SELECT expense_id FROM ExpenseContactRelation WHERE contact_id = :contactId
-        )
-        """)
-    suspend fun getExpensesForContact(contactId: Long): List<Expense>
+    @Transaction
+    @Query("SELECT * FROM Expense")
+    fun getAll(): Flow<List<ExpenseWithContacts>>
 
-    @Query("SELECT * FROM expense WHERE id = :expenseId LIMIT 1")
-    suspend fun loadById(expenseId: Long): Expense // Not safe, have some faith.
+    @Transaction
+    @Query("SELECT * FROM expense WHERE expenseId = :expenseId LIMIT 1")
+    fun getById(expenseId: Long): Flow<ExpenseWithContacts> // Not safe, have some faith.
 
     @Insert
     suspend fun insert(expense: Expense): Long

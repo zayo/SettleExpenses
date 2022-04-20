@@ -8,11 +8,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.nislav.settleexpenses.databinding.ActivityExpenseDetailBinding
-import com.nislav.settleexpenses.ui.SelectableContactsAdapter
+import com.nislav.settleexpenses.ui.ContactWithStateAdapter
 import com.nislav.settleexpenses.ui.detail.expense.ExpenseDetailViewModel.ExpenseDetail
+import com.nislav.settleexpenses.util.InlinedVMFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Displays contact detail. Use [startActivity] for launch.
@@ -20,7 +22,10 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ExpenseDetailActivity : AppCompatActivity() {
 
-    private val adapter = SelectableContactsAdapter {
+    @Inject
+    lateinit var factory: ExpenseDetailViewModel.Factory
+
+    private val adapter = ContactWithStateAdapter {
         viewModel.togglePaid(it)
     }
 
@@ -28,10 +33,9 @@ class ExpenseDetailActivity : AppCompatActivity() {
     private val binding
         get() = requireNotNull(_binding)
 
-    private val viewModel: ExpenseDetailViewModel by viewModels()
-
-    private val detailId by lazy {
-        intent.extras?.getLong(EXTRA_EXPENSE_ID) ?: error("Intent is missing important data!")
+    private val viewModel: ExpenseDetailViewModel by viewModels {
+        val id = intent.extras?.getLong(EXTRA_EXPENSE_ID) ?: error("Intent is missing important data!")
+        InlinedVMFactory { factory.create(id) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,8 +46,6 @@ class ExpenseDetailActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        viewModel.loadExpense(detailId)
 
         binding.recycler.adapter = adapter
 

@@ -2,12 +2,13 @@ package com.nislav.settleexpenses.ui.main.expenses
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nislav.settleexpenses.domain.ExpenseWithContacts
+import com.nislav.settleexpenses.db.entities.ContactWithState
+import com.nislav.settleexpenses.db.entities.ExpenseWithContacts
 import com.nislav.settleexpenses.domain.ExpensesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
@@ -16,9 +17,13 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ExpensesViewModel @Inject constructor(
-    private val repository: ExpensesRepository
+    repository: ExpensesRepository
 ) : ViewModel() {
 
-    suspend fun loadExpenses(): List<ExpenseWithContacts> =
-        repository.getExpenses().sortedBy { it.contacts.all { it.paid } }
+    val expenses: StateFlow<List<ExpenseWithContacts>> =
+        repository.expenses.map { list ->
+            list.sortedBy {
+                it.contacts.all(ContactWithState::paid)
+            }
+        }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 }

@@ -6,17 +6,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nislav.settleexpenses.R
-import com.nislav.settleexpenses.databinding.ItemExpenseBinding
 import com.nislav.settleexpenses.databinding.ItemExpenseSimpleBinding
-import com.nislav.settleexpenses.domain.ExpenseWithContacts
-import com.nislav.settleexpenses.domain.ExpenseWithState
+import com.nislav.settleexpenses.db.entities.ExpenseWithState
+import com.nislav.settleexpenses.ui.detail.contact.ExpensesAdapter.ExpensesViewHolder
 
 /**
  * Responsible for displaying list of [ExpenseWithState].
  */
 class ExpensesAdapter(
     private val itemListener: (ExpenseWithState) -> Unit
-) : ListAdapter<ExpenseWithState, ExpensesAdapter.ExpensesViewHolder>(Differ()) {
+) : ListAdapter<ExpenseWithState, ExpensesViewHolder>(Differ()) {
 
     private val clickDelegate: (Int) -> Unit = { position -> itemListener(getItem(position)) }
 
@@ -42,7 +41,7 @@ class ExpensesAdapter(
 
         fun bind(expense: ExpenseWithState) {
             with(binding) {
-                name.text = expense.expense.name
+                name.text = expense.name
                 if (expense.paid) {
                     root.setBackgroundResource(R.drawable.bg_expense_settled)
                 } else {
@@ -55,7 +54,7 @@ class ExpensesAdapter(
 
 private class Differ : DiffUtil.ItemCallback<ExpenseWithState>() {
     override fun areItemsTheSame(oldItem: ExpenseWithState, newItem: ExpenseWithState): Boolean =
-        oldItem.expense.id == newItem.expense.id
+        oldItem.expenseId == newItem.expenseId
 
     override fun areContentsTheSame(oldItem: ExpenseWithState, newItem: ExpenseWithState): Boolean =
         oldItem == newItem

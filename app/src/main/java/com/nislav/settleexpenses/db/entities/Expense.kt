@@ -13,5 +13,5 @@ data class Expense(
     val date: String,
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0L
+    var expenseId: Long = 0L
 }

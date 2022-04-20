@@ -8,14 +8,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.nislav.settleexpenses.databinding.ActivityContactDetailBinding
-import com.nislav.settleexpenses.domain.ContactWithExpenses
+import com.nislav.settleexpenses.db.entities.ContactWithExpenses
 import com.nislav.settleexpenses.domain.name
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState
 import com.nislav.settleexpenses.ui.detail.expense.ExpenseDetailActivity
+import com.nislav.settleexpenses.util.InlinedVMFactory
 import com.nislav.settleexpenses.util.NoOp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Displays contact detail. Use [startActivity] for launch.
@@ -23,18 +25,20 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ContactDetailActivity : AppCompatActivity() {
 
+    @Inject
+    lateinit var factory: ContactDetailViewModel.Factory
+
     private val adapter = ExpensesAdapter {
-        ExpenseDetailActivity.startActivity(this, it.expense.id)
+        ExpenseDetailActivity.startActivity(this, it.expenseId)
     }
 
     private var _binding: ActivityContactDetailBinding? = null
     private val binding
         get() = requireNotNull(_binding)
 
-    private val viewModel: ContactDetailViewModel by viewModels()
-
-    private val detailId by lazy {
-        intent.extras?.getLong(EXTRA_CONTACT_ID) ?: error("Intent is missing important data!")
+    private val viewModel: ContactDetailViewModel by viewModels {
+        val id = intent.extras?.getLong(EXTRA_CONTACT_ID) ?: error("Intent is missing important data!")
+        InlinedVMFactory { factory.create(id) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,16 +50,13 @@ class ContactDetailActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        viewModel.loadContact(detailId)
-
         binding.recycler.adapter = adapter
 
         lifecycleScope.launch {
-            viewModel.contactState
+            viewModel.detail
                 .flowWithLifecycle(lifecycle)
                 .collect {
                     when (it) {
-                        is ContactState.Init -> NoOp
                         is ContactState.Loading -> NoOp // TODO loading if needed
                         is ContactState.Data -> displayDetail(it.contact, it.debt)
                     }

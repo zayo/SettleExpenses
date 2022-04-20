@@ -11,7 +11,6 @@ import com.nislav.settleexpenses.db.entities.Contact
 import com.nislav.settleexpenses.domain.initials
 import com.nislav.settleexpenses.domain.name
 import com.nislav.settleexpenses.getColor
-import dagger.hilt.internal.aggregatedroot.codegen._com_nislav_settleexpenses_App
 
 /**
  * Responsible for displaying list of [Contact].
@@ -56,7 +55,7 @@ class ContactsAdapter(
 
 private class Differ : DiffUtil.ItemCallback<Contact>() {
     override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean =
-        oldItem.id == newItem.id
+        oldItem.contactId == newItem.contactId
 
     override fun areContentsTheSame(oldItem: Contact, newItem: Contact): Boolean =
         oldItem == newItem

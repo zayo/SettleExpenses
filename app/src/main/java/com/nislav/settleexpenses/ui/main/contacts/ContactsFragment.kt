@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.onEach
 class ContactsFragment : Fragment() {
 
     private val adapter = ContactsAdapter {
-        ContactDetailActivity.startActivity(requireContext(), it.id)
+        ContactDetailActivity.startActivity(requireContext(), it.contactId)
     }
 
     private var _binding: FragmentContactsBinding? = null

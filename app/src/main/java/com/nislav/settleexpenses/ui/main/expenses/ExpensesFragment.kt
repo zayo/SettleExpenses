@@ -7,11 +7,14 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.nislav.settleexpenses.databinding.FragmentExpensesBinding
 import com.nislav.settleexpenses.ui.add.expense.AddExpenseActivity
 import com.nislav.settleexpenses.ui.detail.expense.ExpenseDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 /**
@@ -21,7 +24,7 @@ import kotlinx.coroutines.launch
 class ExpensesFragment : Fragment() {
 
     private val adapter = ExpensesAdapter {
-        ExpenseDetailActivity.startActivity(requireContext(), it.expense.id)
+        ExpenseDetailActivity.startActivity(requireContext(), it.expense.expenseId)
     }
 
     private var _binding: FragmentExpensesBinding? = null
@@ -42,18 +45,13 @@ class ExpensesFragment : Fragment() {
                 AddExpenseActivity.startActivity(requireContext())
             }
         }
-    }
 
-    override fun onStart() {
-        super.onStart()
-
-        // FIXME: Antipatern, yet the DB does not get refreshed on paid state change itself.
-        //  Thus this manual load is needed.
-        viewLifecycleOwner.lifecycleScope.launch {
-            val data = viewModel.loadExpenses()
-            binding.empty.root.isVisible = data.isEmpty()
-            adapter.submitList(data)
-        }
+        viewModel.expenses
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach { data ->
+                binding.empty.root.isVisible = data.isEmpty()
+                adapter.submitList(data)
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun onDestroyView() {

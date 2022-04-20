@@ -2,70 +2,59 @@ package com.nislav.settleexpenses.ui.detail.expense
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nislav.settleexpenses.db.entities.ContactWithState
 import com.nislav.settleexpenses.db.entities.Expense
-import com.nislav.settleexpenses.domain.ExpenseWithContacts
 import com.nislav.settleexpenses.domain.ExpensesRepository
 import com.nislav.settleexpenses.domain.name
-import com.nislav.settleexpenses.ui.SelectableContactsAdapter.SelectableContact
 import com.nislav.settleexpenses.util.normalized
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * ViewModel for the contact detail fragment.
  */
-@HiltViewModel
-class ExpenseDetailViewModel @Inject constructor(
-    private val expensesRepository: ExpensesRepository
+class ExpenseDetailViewModel @AssistedInject constructor(
+    private val expensesRepository: ExpensesRepository,
+    @Assisted private val expenseId: Long
 ) : ViewModel() {
 
-    private val _expense: MutableStateFlow<ExpenseWithContacts?> = MutableStateFlow(null)
-
-    private var expenseId: Long = 0
+    @AssistedFactory
+    interface Factory {
+        fun create(expenseId: Long): ExpenseDetailViewModel
+    }
 
     /**
      * Holds the current [ExpenseDetail].
      */
-    val expenseDetail: Flow<ExpenseDetail>
-        get() = _expense.filterNotNull().map { (expense, contactsWithStates) ->
-            val contacts = contactsWithStates
+    val expenseDetail: Flow<ExpenseDetail> =
+        expensesRepository.load(expenseId).map { expense ->
+            val contacts = expense.contacts
                 .asSequence()
-                .sortedBy { it.contact.name.normalized() }
-                .map { SelectableContact(it.contact, it.paid) }
-                .sortedBy { it.selected }
+                .sortedBy { it.name.normalized() }
+                .sortedBy { it.paid }
                 .toList()
-            val fraction = expense.amount.div(contacts.size)
-            val price = contacts.count { !it.selected } * fraction
+            val fraction = expense.expense.amount.div(contacts.size)
+            val price = contacts.count { !it.paid } * fraction
             ExpenseDetail(
-                expense.name,
+                expense.expense.name,
                 price,
-                expense.amount,
+                expense.expense.amount,
                 contacts
             )
-        }
-
-    /**
-     * Loads the [Expense] with provided [id].
-     */
-    fun loadExpense(id: Long) {
-        expenseId = id
-        viewModelScope.launch {
-            _expense.value = expensesRepository.load(id)
-        }
-    }
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, ExpenseDetail("", 0L, 0L, emptyList()))
 
     /**
      * Selects or deselects contact.
      */
-    fun togglePaid(selectableContact: SelectableContact) {
+    fun togglePaid(contact: ContactWithState) {
         viewModelScope.launch {
-            expensesRepository.togglePaid(expenseId, selectableContact.contact.id)
-            loadExpense(expenseId)
+            expensesRepository.togglePaid(expenseId, contact.contactId, !contact.paid)
         }
     }
 
@@ -75,7 +64,6 @@ class ExpenseDetailViewModel @Inject constructor(
     fun settle() {
         viewModelScope.launch {
             expensesRepository.settleAll(expenseId)
-            loadExpense(expenseId)
         }
     }
 
@@ -86,6 +74,6 @@ class ExpenseDetailViewModel @Inject constructor(
         val name: String,
         val price: Long,
         val priceTotal: Long,
-        val participants: List<SelectableContact>
+        val participants: List<ContactWithState>
     )
 }

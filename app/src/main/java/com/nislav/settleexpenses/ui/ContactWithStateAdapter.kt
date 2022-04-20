@@ -7,32 +7,31 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nislav.settleexpenses.databinding.ItemContactPickBinding
-import com.nislav.settleexpenses.db.entities.Contact
+import com.nislav.settleexpenses.db.entities.ContactWithState
 import com.nislav.settleexpenses.domain.initials
 import com.nislav.settleexpenses.domain.name
 import com.nislav.settleexpenses.getColor
-import com.nislav.settleexpenses.ui.SelectableContactsAdapter.SelectableContact
-import com.nislav.settleexpenses.ui.SelectableContactsAdapter.SelectableContactsViewHolder
+import com.nislav.settleexpenses.ui.ContactWithStateAdapter.ContactWithStateViewHolder
 
 /**
  * Responsible for displaying list of [SelectableContact].
  */
-class SelectableContactsAdapter(
-    private val itemListener: (SelectableContact) -> Unit
-) : ListAdapter<SelectableContact, SelectableContactsViewHolder>(Differ()) {
+class ContactWithStateAdapter(
+    private val itemListener: (ContactWithState) -> Unit
+) : ListAdapter<ContactWithState, ContactWithStateViewHolder>(Differ()) {
 
     private val clickDelegate: (Int) -> Unit = { position -> itemListener(getItem(position)) }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        SelectableContactsViewHolder(
+        ContactWithStateViewHolder(
             ItemContactPickBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             clickDelegate
         )
 
-    override fun onBindViewHolder(holder: SelectableContactsViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: ContactWithStateViewHolder, position: Int) =
         holder.bind(getItem(position))
 
-    class SelectableContactsViewHolder(
+    class ContactWithStateViewHolder(
         private val binding: ItemContactPickBinding,
         private val positionListener: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -44,30 +43,22 @@ class SelectableContactsAdapter(
         }
 
         @SuppressLint("SetTextI18n")
-        fun bind(contact: SelectableContact) {
+        fun bind(contact: ContactWithState) {
             with(binding) {
-                val contactName = contact.contact.name
+                val contactName = contact.name
                 initialsBg.setColorFilter(getColor(contactName))
-                initials.text = contact.contact.initials
+                initials.text = contact.initials
                 name.text = contactName
-                checkbox.isChecked = contact.selected
+                checkbox.isChecked = contact.paid
             }
         }
     }
 
-    private class Differ : DiffUtil.ItemCallback<SelectableContact>() {
-        override fun areItemsTheSame(oldItem: SelectableContact, newItem: SelectableContact): Boolean =
-            oldItem.contact.contactId == newItem.contact.contactId
+    private class Differ : DiffUtil.ItemCallback<ContactWithState>() {
+        override fun areItemsTheSame(oldItem: ContactWithState, newItem: ContactWithState): Boolean =
+            oldItem.contactId == newItem.contactId
 
-        override fun areContentsTheSame(oldItem: SelectableContact, newItem: SelectableContact): Boolean =
+        override fun areContentsTheSame(oldItem: ContactWithState, newItem: ContactWithState): Boolean =
             oldItem == newItem
     }
-
-    /**
-     * Represents [Contact] that can be selected.
-     */
-    data class SelectableContact(
-        val contact: Contact,
-        val selected: Boolean = false
-    )
 }

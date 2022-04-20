@@ -1,0 +1,145 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "647ff34e8015d80c389c60c8c4afa5c0",
+    "entities": [
+      {
+        "tableName": "Contact",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `contactId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "firstName",
+            "columnName": "firstName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastName",
+            "columnName": "lastName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contactId",
+            "columnName": "contactId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "contactId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Expense",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `amount` INTEGER NOT NULL, `date` TEXT NOT NULL, `expenseId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "expenseId",
+            "columnName": "expenseId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "expenseId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ExpenseContactRelation",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`expenseId` INTEGER NOT NULL, `contactId` INTEGER NOT NULL, `paid` INTEGER NOT NULL, PRIMARY KEY(`expenseId`, `contactId`))",
+        "fields": [
+          {
+            "fieldPath": "expenseId",
+            "columnName": "expenseId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contactId",
+            "columnName": "contactId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "paid",
+            "columnName": "paid",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "expenseId",
+            "contactId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_ExpenseContactRelation_expenseId",
+            "unique": false,
+            "columnNames": [
+              "expenseId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ExpenseContactRelation_expenseId` ON `${TABLE_NAME}` (`expenseId`)"
+          },
+          {
+            "name": "index_ExpenseContactRelation_contactId",
+            "unique": false,
+            "columnNames": [
+              "contactId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ExpenseContactRelation_contactId` ON `${TABLE_NAME}` (`contactId`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [
+      {
+        "viewName": "ContactWithState",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT s.expenseId, c.contactId, c.firstName, c.lastName, s.paid \n            FROM Contact c \n            INNER JOIN ExpenseContactRelation s \n            ON c.contactId = s.contactId"
+      },
+      {
+        "viewName": "ExpenseWithState",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT s.contactId, e.expenseId, e.name, e.amount, e.date, s.paid\n            FROM Expense e \n            INNER JOIN ExpenseContactRelation s \n            ON e.expenseId = s.expenseId"
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '647ff34e8015d80c389c60c8c4afa5c0')"
+    ]
+  }
+}

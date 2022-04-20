@@ -1,33 +1,28 @@
 package com.nislav.settleexpenses.domain
 
 import com.nislav.settleexpenses.db.entities.Contact
+import com.nislav.settleexpenses.db.entities.ContactWithExpenses
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Repository for [Contacts] and related operation.
+ * Repository for [Contact] and related operation.
  */
 interface ContactsRepository {
 
     /**
      * Holds current contacts.
      */
-    suspend fun getContacts(): List<Contact>
+    val contacts: Flow<List<Contact>>
 
     /**
      * Loads the contact
      */
-    suspend fun load(contactId: Long): ContactWithExpenses
+    fun load(contactId: Long): Flow<ContactWithExpenses>
 
     /**
      * Adds new [contact].
      */
     suspend fun add(contact: Contact): Long
-
-    /**
-     * Removes existing [contact].
-     */
-    @Deprecated(message = "Makes no sense, would break everything.", level = DeprecationLevel.ERROR)
-    suspend fun remove(contact: Contact)
 
     /**
      * Calculates debt of [contactId].

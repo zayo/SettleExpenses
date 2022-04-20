@@ -9,7 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
@@ -35,9 +34,9 @@ class ContactsViewModel @Inject constructor(
     /**
      * Holds the current contacts, alphabetically sorted, filtered by [query].
      */
-    val contacts = _query.map { query ->
+    val contacts = repository.contacts.combine(_query) { contacts, query ->
         val normalizedQuery = query.normalized()
-        repository.getContacts()
+        contacts
             .asSequence()
             .map { it.name.normalized() to it }
             .filter { (searchableName, _) -> normalizedQuery in searchableName }

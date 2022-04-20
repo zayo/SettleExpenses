@@ -3,11 +3,11 @@ package com.nislav.settleexpenses.db.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 
-@Entity(primaryKeys = ["expense_id", "contact_id"])
+@Entity(primaryKeys = ["expenseId", "contactId"])
 data class ExpenseContactRelation(
-    @ColumnInfo(name = "expense_id")
+    @ColumnInfo(index = true)
     val expenseId: Long,
-    @ColumnInfo(name = "contact_id")
+    @ColumnInfo(index = true)
     val contactId: Long,
     val paid: Boolean = false,
 )

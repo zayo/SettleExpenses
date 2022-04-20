@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -57,9 +56,9 @@ class AddExpenseViewModel @Inject constructor(
     /**
      * Holds the current contacts, alphabetically sorted, filtered by [query].
      */
-    val contacts = _query.map { query ->
+    val contacts = contactsRepository.contacts.combine(_query) { contacts, query ->
         val normalizedQuery = query.normalized()
-        contactsRepository.getContacts()
+        contacts
             .asSequence()
             .map { it.name.normalized() to it }
             .filter { (searchableName, _) -> normalizedQuery in searchableName }
@@ -69,7 +68,7 @@ class AddExpenseViewModel @Inject constructor(
     }.combine(_contactsSelection) { contacts, selection ->
         contacts
             .map {
-                val selected = it.id in selection
+                val selected = it.contactId in selection
                 SelectableContact(it, selected)
             }
     }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
@@ -94,9 +93,9 @@ class AddExpenseViewModel @Inject constructor(
      */
     fun toggleSelection(selectableContact: SelectableContact) {
         _contactsSelection.value = if (selectableContact.selected) {
-            _contactsSelection.value - selectableContact.contact.id
+            _contactsSelection.value - selectableContact.contact.contactId
         } else {
-            _contactsSelection.value + selectableContact.contact.id
+            _contactsSelection.value + selectableContact.contact.contactId
         }
     }
 

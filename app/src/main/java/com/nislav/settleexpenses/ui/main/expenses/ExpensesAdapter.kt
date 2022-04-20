@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nislav.settleexpenses.R
 import com.nislav.settleexpenses.databinding.ItemExpenseBinding
-import com.nislav.settleexpenses.domain.ExpenseWithContacts
+import com.nislav.settleexpenses.db.entities.ExpenseWithContacts
 
 /**
  * Responsible for displaying list of [ExpenseWithContacts].
@@ -61,7 +61,7 @@ class ExpensesAdapter(
 
 private class Differ : DiffUtil.ItemCallback<ExpenseWithContacts>() {
     override fun areItemsTheSame(oldItem: ExpenseWithContacts, newItem: ExpenseWithContacts): Boolean =
-        oldItem.expense.id == newItem.expense.id
+        oldItem.expense.expenseId == newItem.expense.expenseId
 
     override fun areContentsTheSame(oldItem: ExpenseWithContacts, newItem: ExpenseWithContacts): Boolean =
         oldItem == newItem

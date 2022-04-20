@@ -12,5 +12,5 @@ data class Contact(
     val lastName: String,
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0L
+    var contactId: Long = 0L
 }

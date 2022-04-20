@@ -6,14 +6,23 @@ import com.nislav.settleexpenses.db.dao.ContactDao
 import com.nislav.settleexpenses.db.dao.ExpenseContactDao
 import com.nislav.settleexpenses.db.dao.ExpenseDao
 import com.nislav.settleexpenses.db.entities.Contact
+import com.nislav.settleexpenses.db.entities.ContactWithState
 import com.nislav.settleexpenses.db.entities.Expense
 import com.nislav.settleexpenses.db.entities.ExpenseContactRelation
+import com.nislav.settleexpenses.db.entities.ExpenseWithState
 
-@Database(entities = [
-    Contact::class,
-    Expense::class,
-    ExpenseContactRelation::class
-], version = 1)
+@Database(
+    entities = [
+        Contact::class,
+        Expense::class,
+        ExpenseContactRelation::class
+    ],
+    views = [
+        ContactWithState::class,
+        ExpenseWithState::class,
+    ],
+    version = 1
+)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun contactDao(): ContactDao
     abstract fun expenseDao(): ExpenseDao
