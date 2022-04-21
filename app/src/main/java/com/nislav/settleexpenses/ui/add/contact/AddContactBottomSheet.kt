@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doAfterTextChanged
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.nislav.settleexpenses.databinding.ViewAddContactSheetBinding
+import com.google.android.material.composethemeadapter.MdcTheme
 import com.nislav.settleexpenses.db.entities.Contact
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -22,36 +22,21 @@ class AddContactBottomSheet : BottomSheetDialogFragment() {
 
     private val viewModel: AddContactViewModel by viewModels()
 
-    /**
-     * Holds the current data before it's saved.
-     */
-    private var contact = Contact(firstName = "", lastName = "")
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = ViewAddContactSheetBinding.inflate(inflater, container, false).apply {
-        fun refreshStates() {
-            val empty = contact.isEmpty
-            isCancelable = empty
-            actionSave.isEnabled = !empty
-        }
-        firstNameInput.doAfterTextChanged {
-            contact = contact.copy(firstName = it?.toString()?.trim().orEmpty())
-            refreshStates()
-        }
-        lastNameInput.doAfterTextChanged {
-            contact = contact.copy(lastName = it?.toString()?.trim().orEmpty())
-            refreshStates()
-        }
-        actionSave.setOnClickListener {
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.addContact(contact).join()
-                dismiss()
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, state: Bundle?): View =
+        ComposeView(requireContext()).apply {
+            setContent {
+                MdcTheme {
+                    AddContact(onSubmit = this@AddContactBottomSheet::onSubmit)
+                }
             }
         }
-    }.root
+
+    private fun onSubmit(firstName: String, lastName: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.addContact(Contact(firstName, lastName)).join()
+            dismiss()
+        }
+    }
 
     /**
      * Shows the dialog, provides [TAG] itself.
@@ -62,6 +47,3 @@ class AddContactBottomSheet : BottomSheetDialogFragment() {
         const val TAG = "AddContactBottomSheet"
     }
 }
-
-private val Contact.isEmpty
-    inline get() = firstName.isEmpty() && lastName.isEmpty()
