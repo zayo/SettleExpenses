@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.composethemeadapter.MdcTheme
 import com.nislav.settleexpenses.db.entities.Contact
+import com.nislav.settleexpenses.util.withThemedContent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -23,12 +26,8 @@ class AddContactBottomSheet : BottomSheetDialogFragment() {
     private val viewModel: AddContactViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, state: Bundle?): View =
-        ComposeView(requireContext()).apply {
-            setContent {
-                MdcTheme {
-                    AddContact(onSubmit = this@AddContactBottomSheet::onSubmit)
-                }
-            }
+        ComposeView(requireContext()).withThemedContent {
+            AddContact(onSubmit = this@AddContactBottomSheet::onSubmit)
         }
 
     private fun onSubmit(firstName: String, lastName: String) {
