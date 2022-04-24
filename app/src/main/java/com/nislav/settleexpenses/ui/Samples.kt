@@ -1,8 +1,16 @@
 package com.nislav.settleexpenses.ui
 
 import com.nislav.settleexpenses.db.entities.Contact
+import com.nislav.settleexpenses.db.entities.ContactWithState
+import com.nislav.settleexpenses.db.entities.Expense
+import com.nislav.settleexpenses.db.entities.ExpenseWithContacts
+import java.text.SimpleDateFormat
+import java.util.Date
 
 object Samples {
+
+    private val DATE_FORMAT = SimpleDateFormat.getDateInstance()
+
     val contacts = listOf(
         Contact("Boris", "MacLeod").apply { contactId = System.currentTimeMillis() + 1 },
         Contact("Nicholas", "Churchill").apply { contactId = System.currentTimeMillis() + 2 },
@@ -21,5 +29,51 @@ object Samples {
         Contact("Ryan", "Bower").apply { contactId = System.currentTimeMillis() + 15 },
         Contact("Mary", "Hardacre").apply { contactId = System.currentTimeMillis() + 16 },
         Contact("Andrew", "Nash").apply { contactId = System.currentTimeMillis() + 17 },
+    )
+
+    val expenses = listOf(
+        ExpenseWithContacts(
+            Expense(
+                name = "Friday lunch",
+                amount = 500,
+                date = DATE_FORMAT.format(Date(System.currentTimeMillis())),
+            ).apply {
+                expenseId = System.currentTimeMillis() + 1
+            },
+            contacts = listOf(
+                ContactWithState(
+                    expenseId = System.currentTimeMillis() + 1,
+                    contactId = System.currentTimeMillis() + 1,
+                    firstName = "Tim",
+                    lastName = "Avery",
+                    paid = true
+                ),
+                ContactWithState(
+                    expenseId = System.currentTimeMillis() + 1,
+                    contactId = System.currentTimeMillis() + 2,
+                    firstName = "Rose",
+                    lastName = "Lewis",
+                    paid = false
+                ),
+            )
+        ),
+        ExpenseWithContacts(
+            Expense(
+                name = "Saturday dinner",
+                amount = 300,
+                date = DATE_FORMAT.format(Date(System.currentTimeMillis())),
+            ).apply {
+                expenseId = System.currentTimeMillis() + 2
+            },
+            contacts = listOf(
+                ContactWithState(
+                    expenseId = System.currentTimeMillis() + 2,
+                    contactId = System.currentTimeMillis() + 1,
+                    firstName = "Tim",
+                    lastName = "Avery",
+                    paid = true
+                ),
+            )
+        )
     )
 }
