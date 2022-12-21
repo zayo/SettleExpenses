@@ -2,7 +2,6 @@ package com.nislav.settleexpenses
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.nislav.settleexpenses.databinding.ActivityMainBinding
 import com.nislav.settleexpenses.ui.main.PagerAdapter

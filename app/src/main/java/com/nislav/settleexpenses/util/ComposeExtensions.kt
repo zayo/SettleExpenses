@@ -2,7 +2,7 @@ package com.nislav.settleexpenses.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
-import com.google.android.material.composethemeadapter.MdcTheme
+import com.google.accompanist.themeadapter.material.MdcTheme
 
 /**
  * Simple method to save one nesting :)

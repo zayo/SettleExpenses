@@ -15,7 +15,6 @@ import com.nislav.settleexpenses.ui.detail.expense.ExpenseDetailActivity
 import com.nislav.settleexpenses.util.InlinedVMFactory
 import com.nislav.settleexpenses.util.NoOp
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

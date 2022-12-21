@@ -23,20 +23,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.android.material.composethemeadapter.MdcTheme
+import com.google.accompanist.themeadapter.material.MdcTheme
 import com.nislav.settleexpenses.db.entities.Contact
 import com.nislav.settleexpenses.domain.initials
 import com.nislav.settleexpenses.domain.name
-import com.nislav.settleexpenses.getColor
+import com.nislav.settleexpenses.util.getColor
 import com.nislav.settleexpenses.ui.Samples
 
 @Composable
 fun Contacts(
+    modifier: Modifier = Modifier,
     @Size(min = 1)
     contacts: List<Contact>,
     onClick: (Contact) -> Unit = {}
 ) {
-    LazyColumn {
+    LazyColumn(
+        modifier = modifier,
+    ) {
         items(
             items = contacts,
             key = { it.contactId }
@@ -95,6 +98,6 @@ fun LazyItemScope.Contact(
 @Composable
 fun Preview() {
     MdcTheme {
-        Contacts(Samples.contacts)
+        Contacts(contacts = Samples.contacts)
     }
 }

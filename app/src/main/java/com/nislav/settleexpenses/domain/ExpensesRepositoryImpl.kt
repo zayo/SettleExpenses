@@ -1,6 +1,5 @@
 package com.nislav.settleexpenses.domain
 
-import com.nislav.settleexpenses.db.dao.ContactDao
 import com.nislav.settleexpenses.db.dao.ExpenseContactDao
 import com.nislav.settleexpenses.db.dao.ExpenseDao
 import com.nislav.settleexpenses.db.entities.Contact

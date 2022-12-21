@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FabPosition
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -48,17 +49,20 @@ class ExpensesFragment : Fragment() {
                     }
                 },
                 floatingActionButtonPosition = FabPosition.End,
-                content = {
+                content = { padding ->
                     val data = viewModel.expenses.collectAsState(emptyList())
                     if (data.value.isEmpty()) {
                         Box(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(padding),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(text = stringResource(R.string.empty_expenses))
                         }
                     } else {
                         Expenses(
+                            modifier = Modifier.padding(padding),
                             expenses = data.value,
                             onClick = ::showExpenseDetail
                         )

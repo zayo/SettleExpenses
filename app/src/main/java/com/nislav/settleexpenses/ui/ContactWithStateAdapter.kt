@@ -10,7 +10,7 @@ import com.nislav.settleexpenses.databinding.ItemContactPickBinding
 import com.nislav.settleexpenses.db.entities.ContactWithState
 import com.nislav.settleexpenses.domain.initials
 import com.nislav.settleexpenses.domain.name
-import com.nislav.settleexpenses.getColor
+import com.nislav.settleexpenses.util.getColor
 import com.nislav.settleexpenses.ui.ContactWithStateAdapter.ContactWithStateViewHolder
 
 /**

@@ -31,24 +31,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.android.material.composethemeadapter.MdcTheme
-import com.nislav.settleexpenses.COLOR_DISABLED
+import com.google.accompanist.themeadapter.material.MdcTheme
+import com.nislav.settleexpenses.util.COLOR_DISABLED
 import com.nislav.settleexpenses.R
 import com.nislav.settleexpenses.db.entities.ContactWithState
 import com.nislav.settleexpenses.db.entities.Expense
 import com.nislav.settleexpenses.db.entities.ExpenseWithContacts
 import com.nislav.settleexpenses.domain.initials
 import com.nislav.settleexpenses.domain.searchableName
-import com.nislav.settleexpenses.getColor
+import com.nislav.settleexpenses.util.getColor
 import com.nislav.settleexpenses.ui.Samples
 
 @Composable
 fun Expenses(
+    modifier: Modifier = Modifier,
     @Size(min = 1)
     expenses: List<ExpenseWithContacts>,
     onClick: (Expense) -> Unit = {}
 ) {
     LazyColumn(
+        modifier = modifier,
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -150,6 +152,6 @@ fun ContactIcon(contact: ContactWithState) {
 @Composable
 fun Preview() {
     MdcTheme {
-        Expenses(Samples.expenses)
+        Expenses(expenses = Samples.expenses)
     }
 }

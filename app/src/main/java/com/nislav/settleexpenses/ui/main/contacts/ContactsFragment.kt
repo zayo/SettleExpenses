@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FabPosition
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -21,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.nislav.settleexpenses.R
@@ -35,7 +38,7 @@ import dagger.hilt.android.AndroidEntryPoint
  * A Fragment displaying Contacts.
  */
 @AndroidEntryPoint
-class ContactsFragment : Fragment() {
+class ContactsFragment : Fragment(), MenuProvider {
 
     private var searchView: SearchView? = null
 
@@ -43,7 +46,8 @@ class ContactsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+
+        requireActivity().addMenuProvider(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, state: Bundle?) =
@@ -59,17 +63,20 @@ class ContactsFragment : Fragment() {
                     }
                 },
                 floatingActionButtonPosition = FabPosition.End,
-                content = {
+                content = { padding ->
                     val data = viewModel.contacts.collectAsState(emptyList())
                     if (data.value.isEmpty()) {
                         Box(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(padding),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(text = stringResource(R.string.empty_contacts))
                         }
                     } else {
                         Contacts(
+                            modifier = Modifier.padding(padding),
                             contacts = data.value,
                             onClick = ::showContactDetail
                         )
@@ -86,7 +93,7 @@ class ContactsFragment : Fragment() {
         ContactDetailActivity.startActivity(requireContext(), contact.contactId)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun onCreateMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_search, menu)
         searchView = menu.findItem(R.id.search).actionView as SearchView
         searchView?.apply {
@@ -96,4 +103,6 @@ class ContactsFragment : Fragment() {
             }
         }
     }
+
+    override fun onMenuItemSelected(menuItem: MenuItem) = false
 }

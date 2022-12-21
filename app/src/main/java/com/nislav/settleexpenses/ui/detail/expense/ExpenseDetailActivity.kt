@@ -12,7 +12,6 @@ import com.nislav.settleexpenses.ui.ContactWithStateAdapter
 import com.nislav.settleexpenses.ui.detail.expense.ExpenseDetailViewModel.ExpenseDetail
 import com.nislav.settleexpenses.util.InlinedVMFactory
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -71,7 +70,7 @@ class ExpenseDetailActivity : AppCompatActivity() {
     companion object {
 
         /**
-         * Starts the [ExpenseDetailActivity] for provided [contactId].
+         * Starts the [ExpenseDetailActivity] for provided [expenseId].
          */
         fun startActivity(context: Context, expenseId: Long) {
             val intent = Intent(context, ExpenseDetailActivity::class.java).apply {

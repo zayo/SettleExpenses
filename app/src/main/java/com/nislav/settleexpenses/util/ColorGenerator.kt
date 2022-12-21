@@ -1,7 +1,7 @@
-package com.nislav.settleexpenses
+package com.nislav.settleexpenses.util
 
 import androidx.annotation.ColorInt
-import java.lang.Math.abs
+import kotlin.math.abs
 
 private val colors = arrayOf(
     0xffe57373,

@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.android.material.composethemeadapter.MdcTheme
+import com.google.accompanist.themeadapter.material.MdcTheme
 import com.nislav.settleexpenses.R
 import com.nislav.settleexpenses.util.NoOp
 
@@ -42,7 +42,10 @@ fun AddContact(
         val focusRequester = remember { FocusRequester() }
         val firstName = remember { mutableStateOf("") }
         val lastName = remember { mutableStateOf("") }
-        val valid = derivedStateOf { firstName.value.isNotBlank() && lastName.value.isNotBlank() }
+        val valid = remember {
+            derivedStateOf { firstName.value.isNotBlank() && lastName.value.isNotBlank() }
+        }
+
         Spacer(modifier = Modifier
             .fillMaxWidth()
             .height(8.dp))
