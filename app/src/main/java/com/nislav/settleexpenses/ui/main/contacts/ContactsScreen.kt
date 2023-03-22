@@ -23,7 +23,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.themeadapter.material.MdcTheme
 import com.nislav.settleexpenses.R
 import com.nislav.settleexpenses.db.entities.Contact
@@ -58,7 +58,7 @@ fun ContactsScreen(
         },
         floatingActionButtonPosition = FabPosition.End,
         content = { padding ->
-            val data = vm.contacts.collectAsState(emptyList())
+            val data = vm.contacts.collectAsStateWithLifecycle()
             if (data.value.isEmpty()) {
                 Box(
                     modifier = Modifier
