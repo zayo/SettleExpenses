@@ -52,36 +52,9 @@ class ContactsFragment : Fragment(), MenuProvider {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, state: Bundle?) =
         ComposeView(requireContext()).withThemedContent {
-            Scaffold(
-                floatingActionButton = {
-                    FloatingActionButton(onClick = ::addNewContact) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = stringResource(R.string.add_new_contact),
-                            tint = MaterialTheme.colors.onSecondary
-                        )
-                    }
-                },
-                floatingActionButtonPosition = FabPosition.End,
-                content = { padding ->
-                    val data = viewModel.contacts.collectAsState(emptyList())
-                    if (data.value.isEmpty()) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(padding),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(text = stringResource(R.string.empty_contacts))
-                        }
-                    } else {
-                        Contacts(
-                            modifier = Modifier.padding(padding),
-                            contacts = data.value,
-                            onClick = ::showContactDetail
-                        )
-                    }
-                }
+            ContactsScreen(
+                addNewContact = ::addNewContact,
+                showContactDetail = ::showContactDetail
             )
         }
 
