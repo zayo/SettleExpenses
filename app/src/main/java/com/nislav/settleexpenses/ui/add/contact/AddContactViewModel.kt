@@ -17,9 +17,7 @@ class AddContactViewModel @Inject constructor(
     private val repository: ContactsRepository
 ) : ViewModel() {
 
-    fun addContact(contact: Contact): Job =
-        // TODO publish state instead of returning job to join.
-        viewModelScope.launch {
-            repository.add(contact)
-        }
+    suspend fun addContact(firstName: String, lastName: String) {
+        repository.add(Contact(firstName, lastName))
+    }
 }

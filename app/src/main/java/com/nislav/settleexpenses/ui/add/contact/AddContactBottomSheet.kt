@@ -6,13 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.nislav.settleexpenses.db.entities.Contact
 import com.nislav.settleexpenses.util.withThemedContent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 /**
  * Adds the contact.
@@ -20,19 +16,12 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AddContactBottomSheet : BottomSheetDialogFragment() {
 
-    private val viewModel: AddContactViewModel by viewModels()
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, state: Bundle?): View =
         ComposeView(requireContext()).withThemedContent {
-            AddContact(onSubmit = this@AddContactBottomSheet::onSubmit)
+            AddContact {
+                dismiss()
+            }
         }
-
-    private fun onSubmit(firstName: String, lastName: String) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.addContact(Contact(firstName, lastName)).join()
-            dismiss()
-        }
-    }
 
     /**
      * Shows the dialog, provides [TAG] itself.
