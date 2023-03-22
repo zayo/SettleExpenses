@@ -3,6 +3,7 @@ package com.nislav.settleexpenses.di
 import android.content.Context
 import android.util.Log
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.nislav.settleexpenses.db.AppDatabase
 import com.nislav.settleexpenses.db.dao.ContactDao
 import com.nislav.settleexpenses.db.dao.ExpenseContactDao
@@ -19,13 +20,17 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
+    private fun createLoggingQueryExecutor() = object :RoomDatabase.QueryCallback {
+        override fun onQuery(sqlQuery: String, bindArgs: List<Any?>) {
+            Log.i("DB_LOG", "SQL Query: $sqlQuery SQL Args: $bindArgs")
+        }
+    }
+
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
         Room.databaseBuilder(context, AppDatabase::class.java, AppDatabase.DATABASE_NAME)
-            .setQueryCallback({ query, args ->
-                Log.i("NISLAV", "SQL Query: $query SQL Args: $args")
-            }, Executors.newSingleThreadExecutor())
+            .setQueryCallback(createLoggingQueryExecutor(), Executors.newSingleThreadExecutor())
             .build()
 
     @Provides
