@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.themeadapter.material.MdcTheme
 import com.nislav.settleexpenses.R
@@ -35,15 +34,17 @@ import com.nislav.settleexpenses.db.entities.ExpenseWithState
 import com.nislav.settleexpenses.domain.name
 import com.nislav.settleexpenses.ui.Samples
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState
+import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.Factory
 import com.nislav.settleexpenses.util.DayNightPreview
+import com.nislav.settleexpenses.util.assistedHiltViewModel
 
 @Composable
 fun ContactDetailScreen(
-    vm: ContactDetailViewModel = hiltViewModel(),
+    contactId: Long,
     onNavigateUp: () -> Unit,
     onExpenseClicked: (ExpenseWithState) -> Unit,
 ) {
-
+    val vm = assistedHiltViewModel { factory: Factory -> factory.create(contactId) }
     val state by vm.detail.collectAsStateWithLifecycle()
     val title by remember {
         derivedStateOf {
@@ -170,7 +171,7 @@ private fun ExpensesComponent(
 private fun Preview() {
     MdcTheme {
         val state = ContactState.Data(
-            contact= Samples.contactWithExpenses,
+            contact = Samples.contactWithExpenses,
             debt = 12345L,
         )
         ContactDetail(state = state)

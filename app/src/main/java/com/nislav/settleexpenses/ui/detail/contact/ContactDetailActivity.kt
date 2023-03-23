@@ -4,12 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.nislav.settleexpenses.ui.detail.expense.ExpenseDetailActivity
-import com.nislav.settleexpenses.util.InlinedVMFactory
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 /**
  * Displays contact detail. Use [startActivity] for launch.
@@ -17,21 +14,19 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ContactDetailActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var factory: ContactDetailViewModel.Factory
-
-    private val viewModel: ContactDetailViewModel by viewModels {
-        val id =
-            intent.extras?.getLong(EXTRA_CONTACT_ID) ?: error("Intent is missing important data!")
-        InlinedVMFactory { factory.create(id) }
+    private val id by lazy {
+        intent.extras?.getLong(EXTRA_CONTACT_ID) ?: error("Intent is missing important data!")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val contactId = intent.extras?.getLong(EXTRA_CONTACT_ID)
+            ?: error("Intent is missing important data!")
+
         setContent {
             ContactDetailScreen(
-                vm = viewModel,
+                contactId = contactId,
                 onNavigateUp = ::onNavigateUp,
                 onExpenseClicked = { item ->
                     ExpenseDetailActivity.startActivity(this, item.expenseId)
