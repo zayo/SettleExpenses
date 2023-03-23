@@ -1,9 +1,12 @@
 package com.nislav.settleexpenses.ui
 
 import com.nislav.settleexpenses.db.entities.Contact
+import com.nislav.settleexpenses.db.entities.ContactWithExpenses
 import com.nislav.settleexpenses.db.entities.ContactWithState
 import com.nislav.settleexpenses.db.entities.Expense
 import com.nislav.settleexpenses.db.entities.ExpenseWithContacts
+import com.nislav.settleexpenses.db.entities.ExpenseWithState
+import com.nislav.settleexpenses.domain.name
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -76,4 +79,35 @@ object Samples {
             )
         )
     )
+
+    val contactWithExpenses =
+        ContactWithExpenses(
+            contact = contacts[0],
+            expenses = listOf(
+                ExpenseWithState(
+                    contactId = contacts[1].contactId,
+                    expenseId = System.currentTimeMillis() + 1,
+                    name = contacts[1].name,
+                    amount = 300,
+                    date = DATE_FORMAT.format(Date(System.currentTimeMillis())),
+                    paid = true
+                ),
+                ExpenseWithState(
+                    contactId = contacts[2].contactId,
+                    expenseId = System.currentTimeMillis() + 2,
+                    name = contacts[2].name,
+                    amount = 150,
+                    date = DATE_FORMAT.format(Date(System.currentTimeMillis())),
+                    paid = false
+                ),
+                ExpenseWithState(
+                    contactId = contacts[3].contactId,
+                    expenseId = System.currentTimeMillis() + 3,
+                    name = contacts[3].name,
+                    amount = 150,
+                    date = DATE_FORMAT.format(Date(System.currentTimeMillis())),
+                    paid = true
+                ),
+            )
+        )
 }
