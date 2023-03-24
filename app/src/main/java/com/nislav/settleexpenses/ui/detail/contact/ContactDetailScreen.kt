@@ -30,13 +30,27 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.themeadapter.material.MdcTheme
 import com.nislav.settleexpenses.R
+import com.nislav.settleexpenses.db.entities.ContactWithExpenses
 import com.nislav.settleexpenses.db.entities.ExpenseWithState
 import com.nislav.settleexpenses.di.vm.assistedHiltViewModel
 import com.nislav.settleexpenses.domain.name
 import com.nislav.settleexpenses.ui.Samples
-import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState
+import com.nislav.settleexpenses.ui.detail.contact.ContactDetailContract.ContactState
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.Factory
 import com.nislav.settleexpenses.util.DayNightPreview
+import kotlinx.coroutines.flow.StateFlow
+
+interface ContactDetailContract {
+    val detail: StateFlow<ContactState>
+
+    sealed interface ContactState {
+        interface Loading : ContactState
+        interface Data : ContactState {
+            val contact: ContactWithExpenses
+            val debt: Long
+        }
+    }
+}
 
 @Composable
 fun ContactDetailScreen(
@@ -44,10 +58,23 @@ fun ContactDetailScreen(
     onNavigateUp: () -> Unit,
     onExpenseClicked: (ExpenseWithState) -> Unit,
 ) {
-    val vm: ContactDetailViewModel =
+    val viewModel: ContactDetailViewModel =
         assistedHiltViewModel { factory: Factory -> factory.create(contactId) }
+    ContactDetailScreen(
+        contract = viewModel,
+        onNavigateUp = onNavigateUp,
+        onExpenseClicked = onExpenseClicked,
+    )
+}
 
-    val state by vm.detail.collectAsStateWithLifecycle()
+@Composable
+private fun ContactDetailScreen(
+    contract: ContactDetailContract,
+    onNavigateUp: () -> Unit,
+    onExpenseClicked: (ExpenseWithState) -> Unit,
+) {
+
+    val state by contract.detail.collectAsStateWithLifecycle()
     val title by remember {
         derivedStateOf {
             (state as? ContactState.Data)?.contact?.contact?.name
@@ -75,14 +102,14 @@ fun ContactDetailScreen(
                 .padding(padding)
         ) {
             when (val localState = state) {
-                is ContactState.Loading -> CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
-
                 is ContactState.Data -> ContactDetail(
                     modifier = Modifier.fillMaxSize(),
-                    state = localState,
+                    data = localState,
                     onExpenseClicked = onExpenseClicked
+                )
+
+                else -> CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
                 )
             }
         }
@@ -92,7 +119,7 @@ fun ContactDetailScreen(
 @Composable
 private fun ContactDetail(
     modifier: Modifier = Modifier,
-    state: ContactState.Data,
+    data: ContactState.Data,
     onExpenseClicked: (ExpenseWithState) -> Unit = {},
 ) {
     Column(
@@ -101,11 +128,8 @@ private fun ContactDetail(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        OwesComponent(debt = state.debt)
-        ExpensesComponent(
-            data = state.contact.expenses.sortedBy { it.paid },
-            onExpenseClicked = onExpenseClicked,
-        )
+        OwesComponent(debt = data.debt)
+        ExpensesComponent(data = data.contact.expenses, onExpenseClicked = onExpenseClicked)
     }
 }
 
@@ -172,10 +196,11 @@ private fun ExpensesComponent(
 @Composable
 private fun Preview() {
     MdcTheme {
-        val state = ContactState.Data(
-            contact = Samples.contactWithExpenses,
-            debt = 12345L,
-        )
-        ContactDetail(state = state)
+        ContactDetail(data = previewData)
     }
+}
+
+private val previewData = object : ContactState.Data {
+    override val contact: ContactWithExpenses = Samples.contactWithExpenses
+    override val debt: Long = 12345L
 }

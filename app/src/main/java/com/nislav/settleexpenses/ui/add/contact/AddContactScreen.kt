@@ -21,6 +21,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -33,31 +34,43 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.themeadapter.material.MdcTheme
 import com.nislav.settleexpenses.R
-import com.nislav.settleexpenses.db.entities.Contact
 import com.nislav.settleexpenses.util.DayNightPreview
+import com.nislav.settleexpenses.util.NoOp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+interface AddContactContract {
+    suspend fun addContact(firstName: String, lastName: String)
+}
+
+@Composable
+fun AddContactScreen(onDone: () -> Unit) {
+    AddContactScreen(
+        contract = hiltViewModel<AddContactViewModel>(),
+        onDone = onDone
+    )
+}
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun AddContact(
-    vm: AddContactViewModel = hiltViewModel(),
-    onDone: () -> Unit = {}
+private fun AddContactScreen(
+    contract: AddContactContract,
+    onDone: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequesterFirst = remember { FocusRequester() }
     val focusRequesterSecond = remember { FocusRequester() }
 
-    val firstName = remember { mutableStateOf("") }
-    val lastName = remember { mutableStateOf("") }
+    val firstName = rememberSaveable { mutableStateOf("") }
+    val lastName = rememberSaveable { mutableStateOf("") }
     val valid = remember {
         derivedStateOf { firstName.value.isNotBlank() && lastName.value.isNotBlank() }
     }
 
     fun confirm() {
         scope.launch {
-            vm.addContact(firstName.value, lastName.value)
+            contract.addContact(firstName.value, lastName.value)
             onDone()
         }
     }
@@ -132,7 +145,7 @@ fun AddContact(
 }
 
 @Composable
-fun InputField(
+private fun InputField(
     state: MutableState<String>,
     label: String,
     modifier: Modifier = Modifier,
@@ -163,8 +176,15 @@ fun InputField(
 
 @DayNightPreview
 @Composable
-fun Preview() {
+private fun Preview() {
     MdcTheme {
-        AddContact()
+        AddContactScreen(
+            contract = previewContract,
+            onDone = {}
+        )
     }
+}
+
+private val previewContract = object : AddContactContract {
+    override suspend fun addContact(firstName: String, lastName: String) = NoOp
 }

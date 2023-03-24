@@ -5,8 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.nislav.settleexpenses.db.entities.ContactWithExpenses
 import com.nislav.settleexpenses.di.vm.InjectableFactory
 import com.nislav.settleexpenses.domain.ContactsRepository
-import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Data
-import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Loading
+import com.nislav.settleexpenses.ui.detail.contact.ContactDetailContract.ContactState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -19,27 +18,30 @@ import kotlinx.coroutines.flow.stateIn
  * ViewModel for the contact detail fragment.
  */
 class ContactDetailViewModel @AssistedInject constructor(
-    private val repository: ContactsRepository,
+    repository: ContactsRepository,
     @Assisted private val contactId: Long
-) : ViewModel() {
+) : ViewModel(), ContactDetailContract {
 
     @AssistedFactory
     interface Factory : InjectableFactory {
         fun create(contactId: Long): ContactDetailViewModel
     }
 
-    val detail: StateFlow<ContactState> = repository.load(contactId)
-        .combine(repository.loadDebt(contactId), ::Data)
+    override val detail: StateFlow<ContactState> = repository.load(contactId)
+        .combine(repository.loadDebt(contactId), ::mapData)
         .stateIn(viewModelScope, SharingStarted.Eagerly, Loading)
 
-    /**
-     * States of Contact loading.
-     *
-     * @property Loading transition when contact is being loaded.
-     * @property Data when data were loaded.
-     */
-    sealed class ContactState {
-        object Loading : ContactState()
-        data class Data(val contact: ContactWithExpenses, val debt: Long) : ContactState()
-    }
+    private fun mapData(contact: ContactWithExpenses, debt: Long) = Data(
+        contact = contact.copy(
+            expenses = contact.expenses.sortedBy { it.paid }
+        ),
+        debt = debt,
+    )
+
+    private object Loading : ContactState.Loading
+
+    private data class Data(
+        override val contact: ContactWithExpenses,
+        override val debt: Long
+    ) : ContactState.Data
 }

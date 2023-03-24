@@ -18,7 +18,7 @@ class AddContactBottomSheet : BottomSheetDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, state: Bundle?): View =
         ComposeView(requireContext()).withThemedContent {
-            AddContact {
+            AddContactScreen {
                 dismiss()
             }
         }

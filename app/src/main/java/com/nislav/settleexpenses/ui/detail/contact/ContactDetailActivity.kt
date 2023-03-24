@@ -14,10 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ContactDetailActivity : AppCompatActivity() {
 
-    private val id by lazy {
-        intent.extras?.getLong(EXTRA_CONTACT_ID) ?: error("Intent is missing important data!")
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
