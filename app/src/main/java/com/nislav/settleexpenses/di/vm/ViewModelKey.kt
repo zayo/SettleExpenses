@@ -1,4 +1,4 @@
-package com.nislav.settleexpenses.di
+package com.nislav.settleexpenses.di.vm
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey

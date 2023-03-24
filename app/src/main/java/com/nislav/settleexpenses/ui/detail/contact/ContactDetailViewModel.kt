@@ -3,6 +3,7 @@ package com.nislav.settleexpenses.ui.detail.contact
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nislav.settleexpenses.db.entities.ContactWithExpenses
+import com.nislav.settleexpenses.di.vm.InjectableFactory
 import com.nislav.settleexpenses.domain.ContactsRepository
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Data
 import com.nislav.settleexpenses.ui.detail.contact.ContactDetailViewModel.ContactState.Loading
@@ -23,7 +24,7 @@ class ContactDetailViewModel @AssistedInject constructor(
 ) : ViewModel() {
 
     @AssistedFactory
-    interface Factory {
+    interface Factory : InjectableFactory {
         fun create(contactId: Long): ContactDetailViewModel
     }
 

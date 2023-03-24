@@ -1,16 +1,24 @@
-package com.nislav.settleexpenses.util
+package com.nislav.settleexpenses.di.vm
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.nislav.settleexpenses.di.ViewModelFactory
-import com.nislav.settleexpenses.di.ViewModelFactoryEntryPoint
+import com.nislav.settleexpenses.util.InlinedVMFactory
 import dagger.hilt.EntryPoints
 
+/**
+ * Utility for creating [ViewModel]s with their own factories marked with [InjectableFactory].
+ * This assumes the concrete [InjectableFactory] is requested through params, which then defines the
+ * [ViewModel] to be returned. But setting concrete params to the [InjectableFactory] is completely
+ * on caller via [block].
+ * It's expected to define mapping through [ViewModelFactory] module.
+ *
+ * For avoid generating of new instances use `remember(param) { assistedHiltViewModel {...} }`.
+ */
 @Composable
-internal inline fun <reified VMF, reified VM : ViewModel> assistedHiltViewModel(
+internal inline fun <reified VMF : InjectableFactory, reified VM : ViewModel> assistedHiltViewModel(
     crossinline block: (VMF) -> VM
 ): VM {
     val owner = checkNotNull(LocalViewModelStoreOwner.current) {
