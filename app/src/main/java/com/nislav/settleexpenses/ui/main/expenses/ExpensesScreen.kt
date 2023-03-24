@@ -91,7 +91,7 @@ fun ExpensesScreen(
 }
 
 @Composable
-fun Expenses(
+private fun Expenses(
     modifier: Modifier = Modifier,
     @Size(min = 1)
     expenses: List<ExpenseWithContacts>,
@@ -113,7 +113,7 @@ fun Expenses(
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun LazyItemScope.Expense(
+private fun LazyItemScope.Expense(
     expenseWithContacts: ExpenseWithContacts,
     onClick: (Expense) -> Unit
 ) {
@@ -168,7 +168,7 @@ fun LazyItemScope.Expense(
 }
 
 @Composable
-fun ContactIcon(contact: ContactWithState) {
+private fun ContactIcon(contact: ContactWithState) {
     val initials = contact.initials
     val color = Color(if (contact.paid) COLOR_DISABLED else getColor(initials))
     Box(
@@ -193,7 +193,7 @@ fun ContactIcon(contact: ContactWithState) {
 
 @DayNightPreview
 @Composable
-fun Preview() {
+private fun Preview() {
     MdcTheme {
         Expenses(expenses = Samples.expenses)
     }

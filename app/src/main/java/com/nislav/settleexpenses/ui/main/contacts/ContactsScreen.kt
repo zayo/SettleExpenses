@@ -12,8 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Divider
 import androidx.compose.material.FabPosition
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -42,9 +43,9 @@ import com.nislav.settleexpenses.util.getColor
 
 @Composable
 fun ContactsScreen(
-    vm : ContactsViewModel = hiltViewModel(),
+    vm: ContactsViewModel = hiltViewModel(),
     addNewContact: () -> Unit,
-    showContactDetail:(Contact) -> Unit,
+    showContactDetail: (Contact) -> Unit,
 ) {
     Scaffold(
         floatingActionButton = {
@@ -80,7 +81,7 @@ fun ContactsScreen(
 }
 
 @Composable
-fun Contacts(
+private fun Contacts(
     modifier: Modifier = Modifier,
     @Size(min = 1)
     contacts: List<Contact>,
@@ -89,10 +90,13 @@ fun Contacts(
     LazyColumn(
         modifier = modifier,
     ) {
-        items(
+        itemsIndexed(
             items = contacts,
-            key = { it.contactId }
-        ) { contact ->
+            key = { _, contact -> contact.contactId }
+        ) { index, contact ->
+            if (index != 0) {
+                Divider()
+            }
             Contact(contact, onClick)
         }
     }
@@ -100,7 +104,7 @@ fun Contacts(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun LazyItemScope.Contact(
+private fun LazyItemScope.Contact(
     contact: Contact,
     onClick: (Contact) -> Unit
 ) {
@@ -140,7 +144,7 @@ fun LazyItemScope.Contact(
 
 @DayNightPreview
 @Composable
-fun Preview() {
+private fun Preview() {
     MdcTheme {
         Contacts(contacts = Samples.contacts)
     }
